@@ -1,0 +1,39 @@
+
+exportClasses(CAT)
+export(CAT)         # the constructor of CAT
+
+## methods for class CAT
+S3method(adaptXYZ,CAT)
+S3method(adaptxyY,CAT)
+S3method(adaptLab,CAT)
+S3method(adaptLuv,CAT)
+
+#   export all the CAT methods
+export( adaptXYZ,
+        adaptxyY,
+        adaptLab,
+        adaptLuv )
+        
+# conversion functions
+export( xyYfromXYZ,
+        XYZfromxyY,
+        LabfromXYZ,
+        XYZfromLab,
+        LuvfromXYZ,
+        XYZfromLuv,
+        uvfromXYZ
+        )
+
+export( LabfromLCHab,
+        LCHabfromLab,
+        LuvfromLCHuv,
+        LCHuvfromLuv
+        )
+
+#   color difference functions       
+export( DeltaE )
+
+#   data functions
+export( standardXYZ )
+
+importFrom( utils, read.table )
