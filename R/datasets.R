@@ -3,7 +3,8 @@
 ############    private data   ###########
 #   p.dataIlluminants       standard illuminants, with 'standardized' XYZ
 #   p.Ma                    3x3 adaptation matrices
-    
+#   p.dataCCT               Robertson table for CCT
+#    
 #   an advantage of the private data in "sysdata.rda" is that these
 #   do not have to be exposed, and therefore documented
 savePrivateDatasets  <- function( .path="sysdata.rda" )
@@ -15,10 +16,12 @@ savePrivateDatasets  <- function( .path="sysdata.rda" )
     path    = "../inst/extdata/illuminants.txt"
     p.dataIlluminants = read.table( path, sep='\t', header=T, stringsAsFactors=F )
     
-    p.dataIlluminants$XYZ = as.matrix( p.dataIlluminants[  ,c('X','Y','Z') ] )
+    p.dataIlluminants$XYZ   = as.matrix( p.dataIlluminants[  ,c('X','Y','Z') ] )
     p.dataIlluminants[ c('X','Y','Z') ] = NULL
+    p.dataIlluminants$xy    = as.matrix( p.dataIlluminants[  , c('x','y') ] )
+    p.dataIlluminants[ c('x','y') ] = NULL
     n   = ncol( p.dataIlluminants )
-    p.dataIlluminants   = p.dataIlluminants[ ,c(n,1:(n-1)) ]
+    p.dataIlluminants   = p.dataIlluminants[ , c( (n-1):n, 1:(n-2) ) ]
     attr(p.dataIlluminants,"description") = readComments( path )
     savevec = c( savevec, "p.dataIlluminants" )
     
@@ -37,6 +40,19 @@ savePrivateDatasets  <- function( .path="sysdata.rda" )
         
     savevec = c( savevec, "p.Ma" )
     
+    
+    ##---------------       CCT table    ------------------------##
+    path    = "../inst/extdata/dataCCT.txt"
+    p.dataCCT = read.table( path, sep='\t', header=T, stringsAsFactors=F )
+    attr(p.dataCCT,"description") = readComments( path )
+    savevec = c( savevec, "p.dataCCT" )
+    
+    
+    ##---------------       splinefun() - let's see whether this works    ------------------------##
+    #p.uvfromMired       <- list()
+    #p.uvfromMired[[1]]  <- splinefun( p.dataCCT$mired, p.dataCCT$u, method='fmm' )     # for u CIE 1960
+    #p.uvfromMired[[2]]  <- splinefun( p.dataCCT$mired, p.dataCCT$v, method='fmm' )     # for v CIE 1960    
+    #savevec = c( savevec, "p.uvfromMired" )
 
     ##  finally ready to save it
     save( list=savevec, file=.path, compress='xz' )   #     'xz'  'gzip'  FALSE

@@ -101,21 +101,23 @@ commutative triangle property, but guess that some do.
 
 \section{Analogy}{
 Chromatic adaptation can be viewed as an Aristotelian analogy of proportions.
-A general analogy of this type is usually written \emph{A:B = C:D} and read as
+A general analogy of this type is usually written \emph{A:B = C:D} and interpreted as
 "\emph{A} is to \emph{B} as \emph{C} is to \emph{D}".
-In our case the expression \emph{A:I} is read as
+In our case the expression \emph{A:I} is interpreted as
 "the appearance of \emph{A} in a viewing environment with illuminant \emph{I}",
 or more simply
 "the appearance of \emph{A} under illuminant \emph{I}".
 It is better to think of A not as an object color, but as a self-luminous color.
-The analogy \eqn{A:I = B:J} can be read as
-"the appearance of \eqn{A} under illuminant \eqn{I}
-is the same as the appearance of \eqn{B} under illuminant \eqn{J}".
+The analogy \emph{A:I = B:J} can be interpreted as
+"the appearance of \emph{A} under illuminant \emph{I}
+is the same as the appearance of \emph{B} under illuminant \emph{J}".
 \cr
 Solving this problem of chromatic adaptation is solving
-this analogy for \emph{X}:  \emph{A:I = X:J},
-where \emph{I} is the the source illuminant
+the analogy \emph{A:I = X:J} for \emph{X},
+where \emph{A} is the given color,
+\emph{I} is the the source illuminant,
 and \emph{J} is the target illuminant.
+All 3 of these are typically given as \emph{XYZ} vectors.
 }
 
 

@@ -1,32 +1,42 @@
-\name{uvfromXYZ}
+\name{uvfrom}
 \alias{uvfromXYZ}
+\alias{uvfromxy}
 
 
-\title{Convert from XYZ to Uniform Chromaticity Spaces}
+\title{Convert from XYZ or xy to Uniform Chromaticity Spaces}
 
-\description{Convert from XYZ to Uniform Chromaticity Spaces}
+\description{Convert from XYZ or xy to Uniform Chromaticity Spaces}
 
 \usage{
-uvfromXYZ( XYZ, version=1976 ) 
+uvfromXYZ( XYZ, space=1976 )
+
+uvfromxy( xy, space=1976 )
 }
 
 \arguments{
 \item{XYZ}{ a numeric Nx3 matrix with CIE XYZ coordinates in the rows, or a vector that can be converted to such a matrix, by row.}
 
-\item{version}{the year of the version - valid versions are 1976 and 1960.
-The default \code{version=1976} has largely superseded \code{version=1960},
+\item{xy}{ a numeric Nx2 matrix with CIE xy coordinates in the rows, or a vector that can be converted to such a matrix, by row.}
+
+\item{space}{the year of the space of output uv desired - valid spaces are 1976 and 1960.
+The default \code{space=1976} has largely superseded \code{space=1960},
 but the latter is still used for computing Correlated Color Temperature; 
-see \code{\link[colorSpec]{computeCCT}()}.
-The 1976 version is used in the function \code{\link{LuvfromXYZ}()}.
-The 1960 coordinates are usually denoted by uv,
-and the 1976 coordinates by u'v'.
+see \code{\link{CCTfromuv}()}.
+The 1976 space is used in the function \code{\link{LuvfromXYZ}()}.
+The 1960 coordinates are usually denoted by uv, and the 1976 coordinates by u'v'.
 The only difference is that \eqn{v' = (3/2) v}.
 }
 }
 
 \value{
+
 a numeric Nx2 matrix with u'v' (or uv) coordinates in the rows.
-If \eqn{X + 15Y + 3Z \le 0}, uv are set to \code{NA}.
+
+For \code{uvfromXYZ()},
+if \eqn{X + 15Y + 3Z \le 0}, uv are set to \code{NA}.
+
+For \code{uvfromxy()},
+if \eqn{-2x + 12y + 3 \le 0}, uv are set to \code{NA}.
 
 The rownames are copied from input to output.
 If the input is invalid, the function returns \code{NULL}.

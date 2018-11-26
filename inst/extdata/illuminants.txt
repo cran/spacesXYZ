@@ -5,16 +5,18 @@
 #	http://brucelindbloom.com/
 #   ASTM E308-1
 
-          X	Y	Z	CCT	Note	Source
-A	1.09850	1	0.35585	2856	Incandescent / Tungsten	ASTM E308-1
-B	0.99072	1	0.85223	4874	Direct sunlight at noon {obsolete}	Wyszecki & Stiles
-C	0.98074	1	1.18232	6774	Average / North sky Daylight {obsolete}	ASTM E308-1
-D50	0.96422	1	0.82521	5001.8	Horizon Light	ASTM E308-1
-D50.ICC	0.96420288	1	0.82490540	5000.7	ICC profile PCS reference white.  with 16-bit resolution	ICC publications
-D55	0.95682	1	0.92149	5503	Mid-morning / Mid-afternoon Daylight	ASTM E308-1
-D65	0.95047	1	1.08883	6504	Noon Daylight: Television, sRGB color space	ASTM E308-1
-D75	0.94972	1	1.22638	7504	North sky Daylight	ASTM E308-1
-E	1	1	1	5454	Equal energy white	ASTM E308-1
-F2	0.99186	1	0.67393	4230	Cool White Fluorescent	ASTM E308-1
-F7	0.95041	1	1.08747	6500	D65 simulator, Daylight simulator	ASTM E308-1
-F11	1.00962	1	0.64350	4000	Philips TL84, Ultralume 40	ASTM E308-1
+          X	Y	Z	x	y	CCT	Note	Sources
+A	1.09850	1	0.35585	0.44758	0.40745	2856	Incandescent / Tungsten	ASTM E308-1 an CIE
+B	0.99072	1	0.85223	NA	NA	4874	Direct sunlight at noon {obsolete}	Wyszecki & Stiles
+C	0.98074	1	1.18232	0.31006	0.31616	6774	Average / North sky Daylight {obsolete}	ASTM E308-1 and CIE
+D50	0.96422	1	0.82521	0.34567	0.35851	5001.8	Horizon Light	ASTM E308-1 and CIE
+D50.ICC	0.96420288	1	0.82490540	NA	NA	5000.7	ICC profile PCS reference white.  with 16-bit resolution	ICC publications
+D55	0.95682	1	0.92149	0.33243	0.34744	5503	Mid-morning / Mid-afternoon Daylight	ASTM E308-1 and CIE
+D60	0.95230	1	1.00859	0.32163	0.33774	6003	from daylight locus polynomials, then rounded to 5 digits	TB-2018-001
+D60.ACES	NA	NA	NA	0.32168	0.33767	6000	from daylight spectrum of 6000K, then rounded to 5 digits	TB-2018-001
+D65	0.95047	1	1.08883	0.3127	0.3290	6504	Noon Daylight: Television, sRGB color space	ASTM E308-1 and sRGB specification
+D75	0.94972	1	1.22638	0.29903	0.31488	7504	North sky Daylight	ASTM E308-1 and CIE
+E	1	1	1	0.33333	0.33333	5454	Equal energy white	ASTM E308-1
+F2	0.99186	1	0.67393	NA	NA	4230	Cool White Fluorescent	ASTM E308-1
+F7	0.95041	1	1.08747	NA	NA	6500	D65 simulator, Daylight simulator	ASTM E308-1
+F11	1.00962	1	0.64350	NA	NA	4000	Philips TL84, Ultralume 40	ASTM E308-1

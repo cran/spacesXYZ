@@ -21,7 +21,8 @@ export( xyYfromXYZ,
         XYZfromLab,
         LuvfromXYZ,
         XYZfromLuv,
-        uvfromXYZ
+        uvfromXYZ,
+        uvfromxy
         )
 
 export( LabfromLCHab,
@@ -33,7 +34,19 @@ export( LabfromLCHab,
 #   color difference functions       
 export( DeltaE )
 
-#   data functions
-export( standardXYZ )
+#   CCT functions
+export( CCTfromXYZ,
+        CCTfromxy,
+        CCTfromuv,
+        planckLocus
+        )
+        
+#   misc
+export( daylightLocus )
 
-importFrom( utils, read.table )
+#   data functions
+export( standardXYZ,
+        standardxy )
+
+importFrom( utils, read.table, str )
+importFrom( stats, splinefun, uniroot )

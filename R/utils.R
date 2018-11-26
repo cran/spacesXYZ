@@ -20,8 +20,11 @@ gettime <- function()
 #   returns such a matrix, or NULL in case of error
 #
 prepareNxM  <-  function( A, M=3 )
-    {
-    ok  = is.numeric(A)  &&  ((length(A) %% M)==0)  &&  0<length(A)
+    {    
+    ok  = is.numeric(A) &&  0<length(A)  &&  (length(dim(A))<=2)  # &&  (0<M) 
+    
+    ok  = ok  &&  ifelse( is.matrix(A), ncol(A)==M, ((length(A) %% M)==0)  )
+    
     if( ! ok )
         {
         #print( "prepareNx3" )
@@ -31,14 +34,17 @@ prepareNxM  <-  function( A, M=3 )
         #do.call( log.string, arglist, envir=parent.frame(n=3) )
         #myfun   = log.string
         #environment(myfun) = parent.frame(3)
-        log.string( ERROR, "Argument A must be a non-empty numeric Nx%d matrix (with N>0). A='%s...'", M, mess )
+        
+        Aname = deparse(substitute(A))        
+        
+        #   notice hack to make log.string() print name of parent function        
+        log.string( c(ERROR,2L), "Argument '%s' must be a non-empty numeric Nx%d matrix (with N>0). %s='%s...'", 
+                                    Aname, M, Aname, mess )
         return(NULL)
         }
     
-    if( is.null(dim(A)) )
+    if( ! is.matrix(A) )
         A = matrix( A, ncol=M, byrow=TRUE )
-    else if( ncol(A) != M )
-        A = t(A)
         
     return( A )
     }

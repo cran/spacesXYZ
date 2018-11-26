@@ -174,10 +174,10 @@ LuvfromXYZ <- function( XYZ, white )
         }            
         
     #   chromaticity of XYZs  (1976 UCS)
-    uv  = uvfromXYZ( XYZ, version=1976 )
+    uv  = uvfromXYZ( XYZ, space=1976 )
 
     #   chromaticity of white
-    uv.ref  = uvfromXYZ( white, version=1976 )
+    uv.ref  = uvfromXYZ( white, space=1976 )
 
     L = Lightness_from_linear( XYZ[ ,2]/white[2] )
     u = 13 * L * ( uv[ ,1] - uv.ref[1] )
@@ -220,7 +220,7 @@ XYZfromLuv <- function( Luv, white )
         }            
         
     #   chromaticity of white
-    uv.ref  = uvfromXYZ( white, version=1976 )        
+    uv.ref  = uvfromXYZ( white, space=1976 )        
         
     u   = Luv[,2] / ( 13 * Luv[ ,1] )  +  uv.ref[1]
     v   = Luv[,3] / ( 13 * Luv[ ,1] )  +  uv.ref[2]
@@ -245,39 +245,86 @@ XYZfromLuv <- function( Luv, white )
     
 ################      uv  <---  XYZ    #######################
 
-uvfromXYZ <- function( XYZ, version=1976 )
+uvfromXYZ <- function( XYZ, space=1976 )
     {
     XYZ = prepareNxM(XYZ)
     if( is.null(XYZ) )  return(NULL)
+    
+    if( ! match(space,c(1960,1976),nomatch=FALSE) )
+        {
+        log.string( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
+        return(NULL)
+        }
+    
         
     denom = XYZ[ ,1]  +  15 * XYZ[ ,2]  +  3 * XYZ[ ,3]
     
-    mask    = denom <= 0
+    mask    =   denom <= 0
     
-    if( any(mask) )
+    if( any(mask,na.rm=T) )
         {
-        denom[ mask ] = NA_real_
         log.string( WARN, "%d of %d XYZ vectors could not be transformed, because X + 15Y + 3Z <= 0.",
-                                sum(mask), length(mask) )
+                                sum(mask,na.rm=T), length(mask) )
+        denom[ mask ] = NA_real_                                
         }
 
-    if( version == 1976 )
+    if( space == 1976 )
         {
         uv  = cbind( 4*XYZ[ ,1], 9*XYZ[ ,2] ) / denom
         colnames(uv)   = c("u'","v'")
         }
-    else if( version == 1960 )
+    else if( space == 1960 )
         {
         uv = cbind( 4*XYZ[ ,1], 6*XYZ[ ,2] ) / denom
         colnames(uv)   = c('u','v')        
         }
-    else
-        {
-        log.string( WARN, "version='%s' is invalid.",  as.character(version[1]) )
-        return(NULL)
-        }
         
     rownames(uv)   = rownames(XYZ)
+        
+    return( uv )
+    }    
+    
+    
+uvfromxy <- function( xy, space=1976 )
+    {
+    xy = prepareNxM( xy, M=2 )
+    if( is.null(xy) )  return(NULL)
+    
+    if( ! match(space,c(1960,1976,1931),nomatch=FALSE) )
+        {
+        log.string( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
+        return(NULL)
+        }
+
+    denom = -2 * xy[ ,1]  +  12 * xy[ ,2]  +  3
+    
+    mask    = denom <= 0
+    
+    if( any(mask,na.rm=T) )
+        {
+        log.string( WARN, "%d of %d xy vectors could not be transformed, because -2x + 12y + 3 <= 0.",
+                                sum(mask,na.rm=T), length(mask) )
+        denom[ mask ] = NA_real_                                
+        }
+
+    if( space == 1976 )
+        {
+        uv  = cbind( 4*xy[ ,1], 9*xy[ ,2] ) / denom
+        colnames(uv)   = c("u'","v'")
+        }
+    else if( space == 1960 )
+        {
+        uv = cbind( 4*xy[ ,1], 6*xy[ ,2] ) / denom
+        colnames(uv)   = c('u','v')        
+        }
+    else if( space == 1931 )
+        {
+        #   undocumented 'feature'
+        colnames(xy) = c('x','y')
+        return(xy)
+        }
+        
+    rownames(uv)   = rownames(xy)
         
     return( uv )
     }    
@@ -294,6 +341,12 @@ standardXYZ <- function( name )
     return( p.dataIlluminants$XYZ[ idx,  ,drop=F ] )
     }
     
+standardxy <- function( name )
+    {
+    idx = pmatch( toupper(name), rownames(p.dataIlluminants$xy) )
 
+    return( p.dataIlluminants$xy[ idx,  ,drop=F ] )
+    }
+    
     
     
