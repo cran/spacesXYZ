@@ -21,8 +21,8 @@ standardxy( name )
 
 \arguments{
 \item{name}{a subvector of
-\code{c('A','B','C','D50','D50.ICC','D55','D60','D60.ACES',}\cr
-\code{'D65','D75','E','F2','F7','F11')}, 
+\code{c('A','B','C','C.NBS','C.NTSC','C.JOSA','D50','D50.ICC',}\cr
+\code{'D55','D60','D60.ACES','D65','D75','E','F2','F7','F11')}, 
 which are the names of some standard illuminants and white points.
 Matching is partial and case-insensitive.
 }
@@ -37,6 +37,7 @@ xy values were taken from \cite{CIE}, \cite{BT.709}, and \cite{TB-2018-001}.
 For D65 the values in \cite{CIE} and \cite{BT.709} disagree;
 the former has 5 digits and the latter has 4.
 We have selected the value in \cite{BT.709} (page 3) since is far more commonly used.
+Three of the Illuminant C variants are rarely used and obsolete.
 }
 
 \section{Warning}{

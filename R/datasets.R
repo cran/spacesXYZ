@@ -1,4 +1,27 @@
   
+  
+
+saveDatasets  <- function( .path="../data/spacesXYZ.rda" )
+    {
+    savevec = character(0)
+    
+    ##-------------------------     Planckian Loci    -----------------------------##
+    path    =  "../inst/extdata/dataCCT.txt"
+    RobertsonLocus      = read.table( path, header=TRUE, sep='\t', quote='', stringsAsFactors=F )
+    attr(p.dataCCT,"description") = readComments( path )    
+    RobertsonLocus$t    = NULL      # drop the slope column
+    savevec = c( savevec, "RobertsonLocus" )
+
+    PrecisionLocus = makePrecisionLocus()    
+    savevec = c( savevec, "PrecisionLocus" )
+    
+    ##  finally ready to save it
+    save( list=savevec, file=.path, compress='xz' )   #     'xz'  'gzip'  FALSE
+    
+    return( invisible(TRUE) )
+    }    
+  
+  
 
 ############    private data   ###########
 #   p.dataIlluminants       standard illuminants, with 'standardized' XYZ

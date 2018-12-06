@@ -37,19 +37,30 @@ testDeltaE.2000 <- function()
     
     dE.mine = DeltaE( Lab1, Lab2, metric=2000 )
     
+    print( abs(dE.true - dE.mine) )
+    err = max(abs(dE.true - dE.mine))
+    printf( "Max error = %g", err )
+    
+    #   check for noLD  (no long-double)
+    bytes.LD = .Machine$sizeof.longdouble
+    if( 0 < bytes.LD )
+        # the usual case
+        tol = 1.e-4
+    else
+        tol = 5.e-4
+
     df  = cbind( df, dE.mine=dE.mine )
     
     #print( cbind( dE.true, dE.mine ) )    
-    
-    dig = decimalplaces( dE.true )          # ; print(dig)
-
+    #dig = decimalplaces( dE.true )          # ; print(dig)
     #   dE.true[1] = dE.true[1] + 10^(-dig) check for failure
+    # mask    = round(dE.mine,dig) != dE.true #; print( mask )
     
-    mask    = round(dE.mine,dig) != dE.true #; print( mask )
+    mask    = tol < abs(dE.true - dE.mine)
     
     if( any(mask) )
         {
-        printf( "DeltaE.2000 failed for %d samples", sum(mask) )
+        printf( "DeltaE.2000 failed for %d samples.  tol=%g", sum(mask), tol )
         print( df[ mask, ,drop=F ] )
         return(FALSE)
         }

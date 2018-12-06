@@ -127,8 +127,7 @@ adaptxyY.CAT  <-  function( x, xyY.src )
         xyY.tgt[neutral,1] = x$target.xyY[1]
         xyY.tgt[neutral,2] = x$target.xyY[2]
         
-        log.string( DEBUG, "%d neutrals (of %d) given special treatment.", 
-                                sum(neutral), length(neutral) )
+        #   log.string( DEBUG, "%d neutrals (of %d) given special treatment.",   sum(neutral), length(neutral) )
         }
     
     return( xyY.tgt )

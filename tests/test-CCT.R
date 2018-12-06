@@ -11,9 +11,9 @@ printf <- function( msg, ... )
     }
     
 
-testRoundtrips.uv <- function()
+testRoundtrips.uv <- function( locus='robertson' )
     {
-    printf( "\n---------------------  testRoundtrips.uv()  -----------------------" )
+    printf( "\n---------------------  testRoundtrips.uv('%s')  -----------------------", locus )
 
     #   mat = matrix( c('robertson','robertson', 'mccamy','mccamy',  'native','native' ), 3, 2, byrow=TRUE )
     strict  = TRUE
@@ -26,7 +26,7 @@ testRoundtrips.uv <- function()
         else
             temperature = c( 1667, seq(2000,33000,by=1000), 75000, Inf )
         
-        uv      = planckLocus( temperature, param=iso  )
+        uv      = planckLocus( temperature, locus=locus, param=iso  )
         if( any( is.na(uv) ) )
             {
             printf( "planckLocus() failed for param='%s'.  It returned some NAs", iso )
@@ -34,7 +34,7 @@ testRoundtrips.uv <- function()
             return(FALSE)
             }
         
-        CCTback = CCTfromuv( uv, isotherm=iso, strict=strict )
+        CCTback = CCTfromuv( uv, isotherm=iso,  locus=locus, strict=strict )
         if( any( is.na(CCTback) ) )
             {
             printf( "CCTfromuv() failed for isotherm='%s'.  It returned some NAs", iso )
@@ -59,7 +59,7 @@ testRoundtrips.uv <- function()
             }  
         }
 
-    printf( "testRoundtrips.uv() passed." )
+    printf( "testRoundtrips.uv('%s') passed.", locus )
         
     return( TRUE )
     }
@@ -119,16 +119,16 @@ testRoundtrips.xy <- function()
     }
     
 
-testStrictness <- function()
+testStrictness <- function( locus='robertson' )
     {
-    printf( "\n---------------------  testStrictness()  -----------------------" )    
+    printf( "\n---------------------  testStrictness('%s')  -----------------------", locus )    
     
     temperaturetest = c( 1800, seq(2000,33000,by=1000) )
         
     for( delta in c(-0.051,0.051) )  # above and below
         {
         #   make some uv points just outside the valid band above the locus.  Though some will be outside the chromaticity diagram !        
-        uvoutside   = planckLocus( temperaturetest, param='native', delta=delta )
+        uvoutside   = planckLocus( temperaturetest, locus, param='native', delta=delta )
        
         #printf( "delta=%g", delta )
         #print( uvoutside )   
@@ -136,7 +136,7 @@ testStrictness <- function()
         for( isotherm in c('mccamy','robertson','native') )
             {
             #   first test with strict=FALSE, all should succeed.
-            CCT = CCTfromuv( uvoutside, isotherm=isotherm, strict=FALSE )
+            CCT = CCTfromuv( uvoutside, isotherm=isotherm, locus=locus, strict=FALSE )
             
             count   = sum( is.na(CCT) )
             if( 0 < count )
@@ -148,31 +148,33 @@ testStrictness <- function()
                 }  
 
             #   now test with strict=TRUE, all should fail. 
-            CCT = CCTfromuv( uvoutside, isotherm=isotherm, strict=TRUE )
+            CCT = CCTfromuv( uvoutside, isotherm=isotherm, locus=locus, strict=TRUE )
        
             count   = sum( ! is.na(CCT) )            
             if( 0 < count  )
                 {
-                printf( "strict=TRUE test failed for %d of %d points too far from the locus.  delta=%g", 
-                                    count, length(CCT), delta )
+                printf( "strict=TRUE test failed for %d of %d points too far from the '%s' locus.  delta=%g", 
+                                    count, length(CCT), locus, delta )
                 return(FALSE)
                 }    
-                
-                
             }
     
         }
         
-    printf( "testStrictness() passed." )
+    printf( "testStrictness('%s') passed.", locus )
                
     return(TRUE)
     }
     
-if( ! testRoundtrips.uv() )   stop( "testRoundtrips.uv() failed !", call.=FALSE )
+if( ! testRoundtrips.uv('robertson') )  stop( "testRoundtrips.uv('robertson') failed !", call.=FALSE )
     
-if( ! testRoundtrips.xy() )   stop( "testRoundtrips.xy() failed !", call.=FALSE )
+if( ! testRoundtrips.uv('precision') )  stop( "testRoundtrips.uv('precision') failed !", call.=FALSE )
+        
+if( ! testRoundtrips.xy() )             stop( "testRoundtrips.xy() failed !", call.=FALSE )
       
-if( ! testStrictness() )   stop( "testStrictness() failed !", call.=FALSE )
+if( ! testStrictness('robertson') )     stop( "testStrictness('robertson') failed !", call.=FALSE )
+    
+if( ! testStrictness('precision') )     stop( "testStrictness('precision') failed !", call.=FALSE )
     
 
 printf(  "\nPassed all CCT tests !" )

@@ -24,7 +24,7 @@ which is passed to \code{\link{standardXYZ}()} to get the XYZ.
 
 \value{
 \item{xyYfromXYZ()}{ returns a numeric Nx3 matrix with CIE xyY coordinates in the rows.
-If the sum \eqn{X+Y+Z \le 0}, xy are set to \code{NA}.
+If the sum \code{X+Y+Z==0}, \code{xy} are set to \code{NA}.
 }
 
 \item{LabfromXYZ()}{ returns a numeric Nx3 matrix with CIE Lab coordinates in the rows}

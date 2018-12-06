@@ -30,8 +30,9 @@ which is passed to \code{\link{standardXYZ}()} to get the XYZ.
 a numeric Nx3 matrix with XYZ coordinates in the rows.
 The rownames are copied from input to output.
 \cr
-For \code{XYZfromxyY()} an input xyY with Y=0 is treated as a special case (black).
-In this case x and y are ignored, and all XYZ are set to 0.
+In \code{XYZfromxyY()} if \code{y==0} then \code{X} and \code{Z} are set to \code{NA}.
+Exception: \code{Y==0} is treated as a special case (pure black);
+\code{x} and \code{y} are ignored, and \code{XYZ} are all set to 0.
 }
 
 

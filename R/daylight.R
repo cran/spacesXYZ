@@ -39,7 +39,7 @@ daylightLocus <-  function( temperature, space=1931 )
     out = cbind( x=x, y=y )
 
     rnames  = names(temperature)
-    if( is.null(rnames) )   rnames = sprintf( "%dK", round(temperature) )
+    if( is.null(rnames) )   rnames = sprintf( "D%d", round(temperature) )
     
     rownames(out)   = rnames
     

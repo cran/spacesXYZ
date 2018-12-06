@@ -87,22 +87,23 @@ Featured functions in this vignette are:
 \code{planckLocus()} and
 \code{CCTfromuv()}.
 
-The \emph{reference} Planckian locus is defined spectrally - from
+The \emph{reference Planckian locus} is defined spectrally - from
 the famous equation for the Planckian radiator and from the 
 tabulated CIE 1931 standard observer color matching functions.
-It is a $C^\infty$ curve in a 2D chromaticity space, usually either xy (1931) or uv (1960).
+It is a $C^\infty$ curve in a 2D chromaticity space, 
+usually either xy (1931) or uv (1960).
 Since this package does not deal with spectra, 
-we use a good approximation of the locus instead.
-At this time only one approximation of the reference locus is available -
-a spline (using \code{stats::splinefun()} with \code{method="fmm"})
+we use good approximations of the reference locus instead.
+The default approximation is
+a spline (using \texttt{stats::splinefun()} with \texttt{method="fmm"})
 through the 31 uv (1960) locus points in 
 Robertson \cite{Robertson1968} 
 and Wyszecki and Stiles \cite{Wyszecki1982} page 228.
 This spline does not appear in \cite{Robertson1968}, 
-but I am sure Robertson would approve of it.
-It has $C^1$ continuity and is in very good agreement with the \emph{reference locus}.
+but I think Robertson would approve of it.
+It has $C^2$ continuity and is in very good agreement with the reference locus.
 The maximum RMS error in the uv-plane is about $7.3 \times 10^{-6}$
-over the temperature range from 1667 to $\infty$ K.
+over the temperature interval [1667,$\infty$] K.
 A similar piecewise-linear interpolating path has a 
 maximum RMS error about 10 times larger.
 The 31 uv values in the table are accurate to the given 5 decimal places.
@@ -110,7 +111,12 @@ The locus is parameterized directly by reciprocal color temperature ($10^6/T$),
 and therefore indirectly by $T$.
 We call either of these the \emph{native pameterization} of the locus.
 The lines that are perpendicular to the locus are the \emph{native isotherms},
-and we use \code{stats::splinefun()} with \code{deriv=1} to calculate them.
+and we use \texttt{stats::splinefun()} with \texttt{deriv=1} to calculate them.
+
+A second high-resolution locus is available.
+It is a quintic spline through 65 points.
+It is not discussed here; for details see the \textbf{Reference manual}.
+Like the Robertson locus, it also has \emph{native isotherms}.
 
 Two more families of isotherms are available.
 The Robertson isotherms are tabulated in \cite{Robertson1968} 
@@ -121,11 +127,13 @@ single cubic rational function in xy, and no interpolation is necessary.
 Each isotherm family induces a slightly different parameterization of the locus -
 the temperature at a locus point is the temperature of the isotherm
 passing through that point.
-The Robertson parameterization is \emph{not} $C^1$,
-but the \emph{geometric continuity} class is $G^1$.
-The McCamy parameterization is $C^1$.
-For the Robertson and native isotherms the valid temperature range is 1667 to $\infty$ K.
-For the McCamy isotherms the valid temperature range is 1702 to 34539 K.
+The Robertson parameterization is only continuous - $C^0$,
+but the \emph{geometric continuity} class is $G^2$.
+The McCamy parameterization as smooth as the locus, which is $C^2$.
+For the Robertson and native isotherms the valid temperature interval
+is [1667,$\infty$] K.
+For the McCamy isotherms the valid temperature interval is
+at most [1621,34530] K, and may be smaller depending on the locus.
 
 
 <<packs, echo=TRUE, message=FALSE>>=
@@ -194,7 +202,7 @@ It is also apparent that the McCamy isotherms are optimized for the range
 and that McCamy and Robertson agree best (the curves intersect) near 6500K.
 We emphasize that these differences are only for points on the locus.
 For points off the locus the difference can be greater,
-as seen in Figure 1 near 2000 K.
+as seen in Figure 1 near 2000K.
 
 
 % ----------------------------------------------------------------------------
@@ -210,7 +218,7 @@ Since $(u,v)$ is a projective function of $(x,y)$,
 the isotherms in $(u,v)$ are lines through a point too.
 Let's verify this with another plot.
 First we compute the point of intersection in $(u,v)$ and draw
-a circle (in red) centered at the point and passing through the locus at $T$ = 6500 K.
+a circle (in red) centered at the point and passing through the locus at $T$ = 6500K.
 Then we plot the locus and isotherms as before.
 
 
@@ -235,7 +243,7 @@ segments( bot[ ,1], bot[,2], top[,1], top[,2], col=color[3], lwd=1 )
 text( top[ ,1], top[,2], sprintf("%gK",temp), adj=c(1,-0.2), cex=0.5 )
 legend( 'topleft', param[3], lwd=3, bty='n', col=color[3], inset=0.05 )
 @
-It is apparent that the curvature of the locus near $T$ = 6500 K is fairly
+It is apparent that the curvature of the locus near $T$ = 6500K is fairly
 constant, and that is what makes the good approximation possible in that
 temperature range.
 Another way to say it is that the \emph{osculating circle} to the locus
@@ -248,10 +256,10 @@ and the red circle is a good approximation to all of them.
 
 Each pair of adjacent Robertson isotherms intersect at a point below the locus.
 The interpolation at intermediate temperatures is defined so that
-all the intermediate isotherms intersect at that same point,
+all the intermediate isotherms intersect at that same "pivot point",
 see Figure 2(3.11) in \cite{Wyszecki1982}.
 Let's calculate and plot these 30 points.
-<<fig4, echo=TRUE, message=TRUE, fig.pos="H", fig.height=6, out.width='1.0\\linewidth', fig.cap='Adjacent pairs of Robertson isotherms intersect below the locus.' >>=
+<<fig4, echo=TRUE, message=TRUE, fig.pos="H", fig.height=6, out.width='1.0\\linewidth', fig.cap='Adjacent pairs of Robertson isotherms intersect below the locus. The dashed curve is the set of points at distance 0.05 from the locus.' >>=
 mired = seq( 0, 600, by=10 )
 temp  = 1.e6/mired
 uv = planckLocus( temp, param='native' )    # a spline curve
@@ -264,8 +272,8 @@ text( uv[1,1], uv[1,2], expression(infinity), adj=c(0.6,1.5), cex=1.5 )
 mired = c( seq(0,90,by=10), seq(100,600,by=25) )  # these are from Robertson's table
 temp = 1.e6 / mired
 top = planckLocus( temp, param='robertson', delta=0.1 )
-off = planckLocus( temp, param='robertson', delta=-0.05 ) - top
-center = matrix( 0, length(temp)-1, 2 )
+bot = planckLocus( temp, param='robertson', delta=-0.05 ) ;  off = bot - top
+lines( bot[ ,1], bot[ ,2], lty=2 ) ; center = matrix( 0, length(temp)-1, 2 )
 for( i in 1:(length(temp)-1) )  {
     A  = cbind( off[i,], off[i+1,] ) ;    s = solve( A, top[i+1,] - top[i,] )
     center[i,] = top[i,] + s[1]*off[i, ]
@@ -279,8 +287,13 @@ As one moves along the locus, the isotherm "pivot point" jumps from one of these
 points to the next.
 Compare with Figure 3.
 These 30 points are approximately on the \emph{evolute} \cite{wiki:evolute} of the locus.
-The evolute of the \emph{reference locus} (defined by spectra) is a continuous curve.
-The evolute of the spline locus is a continuous curve, except at 30 jumps.
+The \emph{evolute} is the path of the center of the osculating circle
+(also called the \emph{center of curvature}).
+% The evolute of the $C^\infty$ \emph{reference locus} (defined by spectra) is a continuous curve.
+Since the center of curvature depends only on the locus
+and its first and second derivatives,
+and since the locus is $C^2$,
+the evolute of the spline locus is a continuous curve.
 
 
 

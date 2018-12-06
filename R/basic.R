@@ -5,24 +5,38 @@
 
 xyYfromXYZ <- function( XYZ )
     {
-    XYZ = prepareNxM(XYZ)
+    XYZ = prepareNxM(XYZ,3)
     if( is.null(XYZ) )  return(NULL)
 
     xyY = cbind(NA_real_, NA_real_, XYZ[ ,2])
     rownames(xyY) = rownames(XYZ)
     colnames(xyY) = c('x','y','Y')
 
-    denom   = rowSums( XYZ )
-    mask    = 0<denom  &  0<=XYZ[ ,2]
+    #   .rowSums is faster than rowSums()
+    denom   = .rowSums( XYZ, nrow(XYZ), 3 )
 
-    xyY[mask,1]    = XYZ[mask,1] / denom[mask]    # (XYZ[w,1]+XYZ[w,2]+XYZ[w,3])
-    xyY[mask,2]    = XYZ[mask,2] / denom[mask]    # (XYZ[w,1]+XYZ[w,2]+XYZ[w,3])
+    #  denom0 is a logical vector, which may have logical NAs
+    denom0  = denom == 0   
+
+    #   denom0 may have logical NAs, but if so the corresponding assignment has no effect at that index
+    #   which means denom[] was already NA_real_
+    denom[ denom0 ] = NA_real_    
     
-    if( sum(mask) < length(mask) )
-        log.string( WARN, "%d of %d XYZ vectors could not be transformed.", 
-                    length(mask)-sum(mask), length(mask) )
+    #   NA_real values in denom will propagate into x and y
+    #   in this matrix division, we are using the fact that denom is duplicated into the y column
+    xyY[ ,1:2]  = XYZ[ ,1:2] / denom 
 
-    xyY
+    warn    = denom0
+    if( any(warn,na.rm=TRUE) )
+        {
+        #   but do not warn if X=Y=Z=0.  This is the pure-black special case.
+        warn = warn  &  0<.rowSums( XYZ*XYZ, nrow(XYZ), 3 )
+        if( any(warn,na.rm=TRUE) )
+            log.string( WARN, "%d of %d XYZ vectors could not be transformed, because X+Y+Z==0.",    
+                                    sum(warn,na.rm=TRUE), length(warn) )
+        }
+        
+    return( xyY )
     }
 
 XYZfromxyY <- function( xyY )
@@ -34,28 +48,29 @@ XYZfromxyY <- function( xyY )
     rownames(XYZ) = rownames(xyY)
     colnames(XYZ) = c('X','Y','Z')
     
-    #   treat Y=0 as a special case - pure black
-    mask0   = xyY[ ,3] == 0
-    XYZ[mask0, ]  = 0    
+    y   = xyY[ ,2]
+    y0  = (y == 0)
 
-    mask    = xyY[,2] != 0  &  ! mask0
-    mask[ is.na(mask) ] = FALSE
+    #   y0 is a logical vector that may contain NAs
+    #   if y==0 then y0 is TRUE and this NA_real_ will propagate into mult and then into X and Z.  
+    #   If y0 is NA, then this has no effect, but y is NA there anyway.
+    y[ y0 ] = NA_real_        
     
-    if( any(mask) )
-        {
-        xyY_sub     = xyY[mask, ,drop=FALSE]
-        mult        = xyY_sub[ ,3] / xyY_sub[ ,2]
-        XYZ[mask,1] = mult * xyY_sub[ ,1]
-        XYZ[mask,3] = mult * (1-xyY_sub[ ,1]-xyY_sub[ ,2])
-        }
+    mult    = xyY[ ,3] / y
+    XYZ[ ,1] = mult * xyY[ ,1]
+    XYZ[ ,3] = mult * (1 - xyY[ ,1] - y)
         
-    #   mask[ mask0 ] = TRUE
+    # treat Y=0 as a special case, set all XYZ=0
+    #   xy can be anything, even NA, we don't care.
+    Y0   = xyY[ ,3] == 0
+    XYZ[Y0, ]  = 0    
+            
+    warn    = is.finite(xyY[ ,1]) &  y0  &  ! Y0
+    if( any(warn,na.rm=TRUE) )
+        log.string( WARN, "%d of %d xyY vectors could not be transformed because y==0.", 
+                    sum(warn,na.rm=TRUE), length(warn) )
 
-    if( sum(mask | mask0) < length(mask) )
-        log.string( WARN, "%d of %d xyY vectors could not be transformed.", 
-                    length(mask)-sum(mask|mask0), length(mask) )
-
-    XYZ
+    return( XYZ )
     }
 
 
@@ -65,16 +80,12 @@ Lightness_from_linear  <-  function( Y )
     {
     thresh = (24/116)^3
     
-    out = ifelse( Y < thresh, (116/12)^3 *Y, 116*Y^(1/3) - 16 )
-    
-    out
+    return( ifelse( Y < thresh, (116/12)^3 *Y, 116*Y^(1/3) - 16 ) )
     }
     
 linear_from_Lightness  <-  function( L )
     {
-    out = ifelse( L < 8, (12/116)^3 * L, ((L + 16)/116)^3 )
-    
-    out
+    return( ifelse( L < 8, (12/116)^3 * L, ((L + 16)/116)^3 ) )
     }
     
     

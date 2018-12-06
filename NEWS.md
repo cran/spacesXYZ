@@ -1,5 +1,10 @@
 # NEWS for **spacesXYZ** package
 
+### Version 1.0-3  [2018-12-04]
+
+* added Planckian locus with higher precision
+* fixed some errors in isotherms vignette
+
 ### Version 1.0-2  [2018-11-26]
 
 * added 4 functions for working with CCT, and a vignette for them
