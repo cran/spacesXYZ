@@ -16,7 +16,7 @@ saveDatasets  <- function( .path="../data/spacesXYZ.rda" )
     savevec = c( savevec, "PrecisionLocus" )
     
     ##  finally ready to save it
-    save( list=savevec, file=.path, compress='xz' )   #     'xz'  'gzip'  FALSE
+    save( list=savevec, file=.path, compress='xz', version=2 )   #     'xz'  'gzip'  FALSE
     
     return( invisible(TRUE) )
     }    
@@ -50,10 +50,11 @@ savePrivateDatasets  <- function( .path="sysdata.rda" )
     
     #   list of adaptation matrices
     p.Ma    = list()
-    p.Ma[[ "Bradford" ]]    = matrix( c(0.8951,0.2664,-0.1614,  -0.7502,1.7135,0.0367,  0.0389,-0.0685,1.0296), 3, 3, byrow=T )
-    p.Ma[[ "VonKries" ]]    = matrix( c(0.40024,0.7076,-0.08081,  -0.2263,1.16532,0.0457,  0,0,0.91822), 3, 3, byrow=T )
-    p.Ma[[ "MCAT02" ]]      = matrix( c( 0.7328, 0.4296, -0.1624,  -0.7036, 1.6975, 0.0061, 0.0030, 0.0136, 0.9834 ), 3, 3, byrow=T )
-    p.Ma[[ "scaling" ]]     = diag(3)
+    p.Ma[[ "Bradford" ]]            = matrix( c(0.8951,0.2664,-0.1614,  -0.7502,1.7135,0.0367,  0.0389,-0.0685,1.0296), 3, 3, byrow=T )
+    p.Ma[[ "VonKries" ]]            = matrix( c(0.40024,0.7076,-0.08081,  -0.2263,1.16532,0.0457,  0,0,0.91822), 3, 3, byrow=T )
+    p.Ma[[ "MCAT02" ]]              = matrix( c( 0.7328, 0.4296, -0.1624,  -0.7036, 1.6975, 0.0061, 0.0030, 0.0136, 0.9834 ), 3, 3, byrow=T )
+    p.Ma[[ "Bianco+Schettini" ]]    = matrix( c( 0.8752, 0.2787, -0.1539,  -0.8904, 1.8709, 0.0195, -0.0061, 0.0162, 0.9899 ), 3, 3, byrow=T )
+    p.Ma[[ "scaling" ]]             = diag(3)
     
     for( k in 1:length(p.Ma) )
         {
@@ -78,7 +79,7 @@ savePrivateDatasets  <- function( .path="sysdata.rda" )
     #savevec = c( savevec, "p.uvfromMired" )
 
     ##  finally ready to save it
-    save( list=savevec, file=.path, compress='xz' )   #     'xz'  'gzip'  FALSE
+    save( list=savevec, file=.path, compress='xz', version=2 )   #     'xz'  'gzip'  FALSE
     
     return( invisible(TRUE) )
     }    

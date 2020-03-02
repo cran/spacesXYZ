@@ -1,5 +1,14 @@
 # NEWS for **spacesXYZ** package
 
+### Version 1.1-0  [2020-03-02]
+
+* added new vignette _Chromatic Adaptation_
+* added whitepoint `DCI`
+* added `README.md` file
+* added Bianco-Schettini cone response matrix
+* in function `CAT()` allow argument `method` to be a 3x3 cone response matrix
+* changed spelling of `D60.ACES` to simply `ACES`
+
 ### Version 1.0-3  [2018-12-04]
 
 * added Planckian locus with higher precision

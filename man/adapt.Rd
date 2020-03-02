@@ -56,7 +56,7 @@ it simply multiplies each of the input XYZs by \code{x$M}.
 \code{adaptxyY()} converts xyY.src to XYZ,
 calls \code{adaptXYZ()},
 and then converts back to xyY.tgt.
-And it does an addition check:
+And it does an additional check:
 if the xy of xyY.src is equal to the xy of \code{x$source.xyY},
 then the xy of the returned xyY.tgt is set to be the xy of \code{x$target.xyY}.
 

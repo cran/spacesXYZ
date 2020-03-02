@@ -129,7 +129,7 @@ the temperature at a locus point is the temperature of the isotherm
 passing through that point.
 The Robertson parameterization is only continuous - $C^0$,
 but the \emph{geometric continuity} class is $G^2$.
-The McCamy parameterization as smooth as the locus, which is $C^2$.
+The McCamy parameterization is as smooth as the locus, which is $C^2$.
 For the Robertson and native isotherms the valid temperature interval
 is [1667,$\infty$] K.
 For the McCamy isotherms the valid temperature interval is
@@ -232,7 +232,7 @@ uv = planckLocus( temp, param='native' )
 plot( c(0.16,0.32), c(0.23,0.36), type='n', xlab='', ylab='', las=1, tcl=0,
         lab=c(10,8,7), mgp=c(3,0.25,0), asp=1 )
 title( xlab='u', line=1.5 ) ;  title( ylab='v', line=1.5 ) ; grid( lty=1, lwd=0.75 )  
-symbols( rep(uv0[1],2), rep(uv0[2],2), circles=c(rad,0.001), fg='red', inch=FALSE, add=T )
+symbols( rep(uv0[1],2), rep(uv0[2],2), circles=c(rad,0.001), fg='red', inch=FALSE, add=TRUE )
 points( uv1[1], uv1[2], pch=20, col='red' )
 lines( uv[ ,1], uv[ ,2], lwd=0.7 )  ;  points( uv[1,1], uv[1,2], pch=20, cex=0.5 )
 text( uv[1,1], uv[1,2], expression(infinity), adj=c(0.6,1.6), cex=1.5 )

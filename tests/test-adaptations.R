@@ -20,7 +20,7 @@ testFundamental <- function()
     
     #  xyY_D65     = xyYfromXYZ( D65 )    
     
-    for( method in c( "Bradford", "VonKries", "MCAT02", "scaling" ) )
+    for( method in c( "Bradford", "VonKries", "MCAT02", "Bianco", "scaling" ) )
         {
         CtoD65  = CAT( C, D65, method=method )
 
@@ -48,7 +48,7 @@ testSymmetry <- function()
 
     I3  = diag(3)
     
-    for( method in c( "Bradford", "VonKries", "MCAT02", "scaling" ) )
+    for( method in c( "Bradford", "VonKries", "MCAT02", "Bianco", "scaling" ) )
         {
         AtoB    = CAT( 'A', 'B', method=method )
         
@@ -74,7 +74,7 @@ testCommutativity <- function()
     {
     printf( "\n---------------  testCommutativity()  -----------------------" )
 
-    for( method in c( "Bradford", "VonKries", "MCAT02", "scaling" ) )
+    for( method in c( "Bradford", "VonKries", "MCAT02", "Bianco", "scaling" ) )
         {
         AtoB    = CAT( 'A', 'B', method=method )
         

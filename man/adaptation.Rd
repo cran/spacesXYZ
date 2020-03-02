@@ -7,9 +7,9 @@
 Chromatic Adaptation Transforms (CATs)
 }
 \description{
-Transform from a source viewing enviroment with a given illuminant,
+Construct transforms from a source viewing enviroment with a given illuminant,
 to a target viewing environment with a different illuminant.
-Some standard linear CATs are available.
+Some standard linear von-Kries-based CAT methods are available.
 }
 \usage{
 CAT( source.XYZ, target.XYZ, method="Bradford" )
@@ -31,9 +31,15 @@ as in the function \code{standardXYZ()}.
 
 \item{method}{
 the method used for the chromatic adaptation. Available methods are:
-\code{"Bradford"}, \code{"VonKries"}, \code{"MCAT02"}, and \code{"scaling"};
+\code{"Bradford"}, \code{"VonKries"}, \code{"MCAT02"}, \code{"Bianco+Schettini"},
+and \code{"scaling"};
 see \bold{References}.
 Partial matching is enabled, and matching is case-insensitive.
+\cr
+\code{method} can also be a 3x3 matrix, which is the cone response matrix
+used to construct a von-Kries-based CAT.
+The matrix must be invertible and map both \code{source.XYZ} and \code{target.XYZ}
+to the positive octant.
 }
 
 }
@@ -48,7 +54,8 @@ Partial matching is enabled, and matching is case-insensitive.
 
 An object with S3 class \bold{CAT} is a list with the following items:
 \describe{
-\item{method}{full name of the adaptation method, as in \bold{Arguments}}
+\item{method}{full name of the adaptation method, as in \bold{Arguments}.
+If argument \code{method} is a 3x3 matrix, then this \code{method} is \code{NA}.}
 \item{Ma}{3x3 \emph{cone response matrix} \eqn{M_A} for the method, as defined in \cite{Lindbloom}}
 \item{source.XYZ}{XYZ of the illuminant in the source viewing environment}
 \item{source.xyY}{xyY of the illuminant in the source viewing environment}
@@ -68,60 +75,22 @@ Compare with \cite{Lindbloom}.}
 
 
 \note{
-All CAT methods should have this property:
-\itemize{
-\item identity: if the source and target XYZ are the same, then the CAT is the identity
-}
-
-
-All these adaptation methods are linear.
-For \code{MCAT02} only the simplified linear variant is used.
-Linear methods (transforms) have the identity property, and also these desirable properties:
-\itemize{
-\item inverse: If A and B are viewing environments, then adapting XYZ from A to B
-is the inverse of adapting XYZ from B to A (the two CATs are inverses of each other)
-\item  commutative triangle:
-If there are 3 viewing environments, say A, B, and C,
-then adapting from A to B, and then from B to C,
-is the same as adapting from A to C.
-Equivalently (assuming the inverse property), a round-trip around the triangle is the identity.
-The property reduces to properties of matrix multiplication.
-The property makes it possible to use the intermediate
-\emph{Profile Connection Space} (PCS) in ICC color profiles.
-In the above-mentioned diagram, B represents the PCS, and A and C represent
-viewing environments for devices.
-The profile tag \code{'chad'} is the \emph{chromatic adaptation matrix} in v. 4 ICC color profiles.
-}
-According to \emph{Hunt} p. 591, the non-linear CAT97 adaptation transforms
-does not have the inverse property.
-\cr
-I do not know whether any non-linear adaptation transforms violate the
-commutative triangle property, but guess that some do.
-}
-
-\section{Analogy}{
 Chromatic adaptation can be viewed as an Aristotelian analogy of proportions.
-A general analogy of this type is usually written \emph{A:B = C:D} and interpreted as
-"\emph{A} is to \emph{B} as \emph{C} is to \emph{D}".
-In our case the expression \emph{A:I} is interpreted as
-"the appearance of \emph{A} in a viewing environment with illuminant \emph{I}",
-or more simply
-"the appearance of \emph{A} under illuminant \emph{I}".
-It is better to think of A not as an object color, but as a self-luminous color.
-The analogy \emph{A:I = B:J} can be interpreted as
-"the appearance of \emph{A} under illuminant \emph{I}
-is the same as the appearance of \emph{B} under illuminant \emph{J}".
-\cr
-Solving this problem of chromatic adaptation is solving
-the analogy \emph{A:I = X:J} for \emph{X},
-where \emph{A} is the given color,
-\emph{I} is the the source illuminant,
-and \emph{J} is the target illuminant.
-All 3 of these are typically given as \emph{XYZ} vectors.
+For more about this, see the vignette
+\href{../doc/adaptation.html}{\bold{Chromatic Adaptation}}.
 }
 
 
 \references{
+
+
+Bianco, Simone and Raimondo Schettini.
+\bold{Two new von Kries based chromatic adaptation transforms found by numerical optimization}.
+Color Research & Application.
+v. 35. i. 3.
+Jan 2010.
+
+
 Hunt, R. W. G.
 \bold{The Reproduction of Colour}.  6th Edition.
 John Wiley & Sons.
@@ -147,7 +116,11 @@ CIECAM02.
 }
 
 \seealso{
-\code{\link{standardXYZ}()}
+\code{\link{standardXYZ}()},
+\code{\link{adaptXYZ}()}, 
+\code{\link{adaptxyY}()}, 
+\code{\link{adaptLab}()}, 
+\code{\link{adaptLuv}()}
 }
 
 \examples{

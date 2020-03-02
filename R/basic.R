@@ -341,20 +341,32 @@ uvfromxy <- function( xy, space=1976 )
     }    
     
 
-#   requires private data frame p.dataIlluminants, which is lazy-loaded from sysdata.rda;  see savePrivateDatasets()
+####   requires private data frame p.dataIlluminants, which is lazy-loaded from sysdata.rda;  see savePrivateDatasets()  ##
+
+illumsubset <- function( name )
+    {
+    if( is.null(name) || (is.character(name) && 0<length(name) && name[1]=='*') )
+        # just return everything !
+        idx = 1:nrow(p.dataIlluminants)
+    else
+        #   this idx might have length = 0, but that's OK
+        idx = pmatch( toupper(name), rownames(p.dataIlluminants) )
+        
+    return(idx)
+    }
+    
+#   pmatch() assumes that the rownames of p.dataIlluminants are upper case
+    
 standardXYZ <- function( name )
     {
-    #   XYZ             = p.dataIlluminants$XYZ 
-    #   rownames(XYZ)   = p.dataIlluminants$Name
-    
-    idx = pmatch( toupper(name), rownames(p.dataIlluminants$XYZ) )
+    idx = illumsubset( name )
 
     return( p.dataIlluminants$XYZ[ idx,  ,drop=F ] )
     }
     
 standardxy <- function( name )
     {
-    idx = pmatch( toupper(name), rownames(p.dataIlluminants$xy) )
+    idx = illumsubset( name )
 
     return( p.dataIlluminants$xy[ idx,  ,drop=F ] )
     }

@@ -24,8 +24,8 @@ The API is small.  There are functions to
 \itemize{
 \item convert between CIE XYZ and other CIE spaces
 \item create and perform some standard chromatic adaptation transforms (CATs)
-\item compute the CIE 1976 color difference \eqn{\Delta}E
-\item retrieve XYZ of some standard illuminants
+\item compute 3 standard color difference \eqn{\Delta}E metrics
+\item retrieve XYZ and xy of some standard illuminants
 }
 }
 
@@ -34,8 +34,6 @@ The API is small.  There are functions to
 Package \pkg{colorscience} is a superset of this one.
 \cr
 Package \pkg{colorspace} has similar functionality, and is much faster because it in compiled C.
-But the whitepoint (e.g. used when converting XYZ to Lab) is a global variable
-and cannot be passed as a parameter.
 \cr
 Package \pkg{grDevices} also has similar functionality
 (in the function \code{\link[grDevices]{convertColor}()}),

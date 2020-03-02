@@ -22,9 +22,12 @@ standardxy( name )
 \arguments{
 \item{name}{a subvector of
 \code{c('A','B','C','C.NBS','C.NTSC','C.JOSA','D50','D50.ICC',}\cr
-\code{'D55','D60','D60.ACES','D65','D75','E','F2','F7','F11')}, 
+\code{'D55','D60','D65','D75','E','F2','F7','F11','ACES','DCI')}, 
 which are the names of some standard illuminants and white points.
 Matching is partial and case-insensitive.
+\cr
+\code{name} can also be \code{NULL} or \code{'*'} which
+means to return \emph{all} available data.
 }
 }
 
@@ -33,7 +36,8 @@ All XYZ values are taken from the ASTM publication in \bold{References},
 except \code{B} which is taken from \cite{Wyszecki & Stiles}
 and \code{D50.ICC} which is taken from ICC publications.
 
-xy values were taken from \cite{CIE}, \cite{BT.709}, and \cite{TB-2018-001}.
+xy values were taken from \cite{CIE}, \cite{BT.709}, \cite{SMPTE EG 432-1},
+and \cite{TB-2018-001}.
 For D65 the values in \cite{CIE} and \cite{BT.709} disagree;
 the former has 5 digits and the latter has 4.
 We have selected the value in \cite{BT.709} (page 3) since is far more commonly used.
@@ -45,13 +49,14 @@ The returned XYZs are normalized so that Y=1.
 In other color domains, it is common to normalize so that Y=100;
 in these cases be sure to multiply by 100.
 
-Some illuminants have no XYZ available and some have no xy.
+Some illuminants have no standard XYZ available and some have no standard xy.
 In these cases, the rows are filled with NAs.
 }
 
 \value{
 \code{standardXYZ()} returns
-an Mx3 matrix where M is the length of \code{name}.  
+an Mx3 matrix where M is the length of \code{name}.
+But if \code{name} is \code{NULL} or \code{'*'}, M is the number of records available.
 Each row filled with the official XYZ, but if the illuminant name is not recognized
 or if there is no data, the row is all \code{NA}s.
 The output XYZ is normalized so that \code{Y=1}.
@@ -89,6 +94,10 @@ The Academy of Motion Picture Arts and Sciences.
 Science and Technology Council.
 Academy Color Encoding System (ACES) Project.
 June 15, 2018.
+
+SMPTE RP 431-2.
+\bold{D-Cinema Quality - Reference Projector and Environment for the Display of DCDM in Review Rooms and Theaters}.
+2011.
 }
 
 

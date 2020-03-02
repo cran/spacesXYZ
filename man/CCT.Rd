@@ -214,7 +214,7 @@ Table 1(3.11). pp. 227-228.
 \code{\link[colorSpec:computeCCT]{colorSpec::computeCCT}()},
 \code{\link{RobertsonLocus}},
 \code{\link{PrecisionLocus}},
-the vignette \bold{Correlated Color Temperature Isotherms}
+the vignette \href{../doc/isotherms.pdf}{\bold{Correlated Color Temperature Isotherms}}
 }
 
 \examples{

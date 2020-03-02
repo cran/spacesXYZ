@@ -3,6 +3,8 @@
 
 #   constructor for CAT - Chromatic Adaptation Transform
 #
+#   depends on global p.Ma, which is lazy-loaded from sysdata.rda
+
 CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
     {
     if( is.character(source.XYZ) )
@@ -26,19 +28,52 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
         }   
     
     
-    full    = names(p.Ma)   # c( "Bradford", "VonKries", "MCAT02", "scaling" )
-    
-    idx     = pmatch( tolower(method[1]), tolower(full) )
-    if( is.na(idx) )
+    if( is.character(method) )
         {
-        log.string( ERROR, "method='%s' is invalid.", method )
+        full    = names(p.Ma)  
+            
+        idx     = pmatch( tolower(method[1]), tolower(full) )
+        if( is.na(idx) )
+            {
+            log.string( ERROR, "method='%s' is invalid.", method )
+            return(NULL)
+            }    
+
+        Ma = p.Ma[[ idx ]]
+        
+        method_name = full[idx]
+        }
+    else if( is.numeric(method) )
+        {
+        ok  = is.matrix(method)  &&  all( dim(method)==c(3,3) )
+        if( ! ok )
+            {
+            log.string( ERROR, "numeric method is invalid. It must be a 3x3 cone response matrix." )
+            return(NULL)
+            }
+            
+        Ma  = method
+        rownames(Ma)    = c('L','M','S')
+        colnames(Ma)    = c('X','Y','Z')        
+        
+        #   check that Ma is invertible
+        test    = rcond(Ma)
+        tol     = 1.e-6
+        if( rcond(Ma) < tol )
+            {
+            log.string( ERROR, "method = cone response matrix invalid, because the matrix is not invertible. rcond=%g < %g", test, tol  )
+            return(NULL)
+            }
+            
+        method_name = NA_character_
+        }
+    else
+        {
+        log.string( ERROR, "method is neither character nor numeric. typeof(method)=%s.", typeof(method) )
         return(NULL)
-        }    
+        }
 
-    Ma = p.Ma[[ idx ]]
 
-    #rownames(Ma)    = c('L','M','S')
-    #colnames(Ma)    = c('X','Y','Z')
     
     
     if( identical( as.numeric(source.XYZ), as.numeric(target.XYZ) ) )
@@ -46,8 +81,8 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
         M   = diag(3)
     else
         {
-        crm_src = coneResponseMatrix( Ma, source.XYZ )
-        crm_tgt = coneResponseMatrix( Ma, target.XYZ )
+        crm_src = partialAdaptationMatrix( Ma, source.XYZ )
+        crm_tgt = partialAdaptationMatrix( Ma, target.XYZ )
         
         if( is.null(crm_src)  ||  is.null(crm_tgt) )   return(NULL)
         
@@ -60,15 +95,15 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
     
     out = list()
     
-    out$method  = full[idx]
-    out$Ma      = Ma
+    out$method      = method_name
+    out$Ma          = Ma
     out$source.XYZ  = source.XYZ
     out$source.xyY  = specialxyY( source.XYZ )
     
     out$target.XYZ  = target.XYZ    
     out$target.xyY  = specialxyY( target.XYZ )
     
-    out$M       = M
+    out$M           = M
 
     class(out)  = c( "CAT", class(out) )
     
@@ -186,16 +221,17 @@ adaptLuv.CAT  <-  function( x, Luv.src )
     
 
 
-#   .Ma     the matrix for the method
+#   .Ma     the matrix for the von-Kries-based method
 #   .white  the reference white    
 #   returns a matrix that maps .white to (1,1,1)
-coneResponseMatrix  <-  function( .Ma, .white )
+#   so (1,1,1) is an intermediate, and partial means half-way
+partialAdaptationMatrix  <-  function( .Ma, .white )
     {   
     lms = .Ma %*% as.numeric(.white)
     
     if( any( lms<=0 ) )
         {
-        log.string( ERROR, "white XYZ=(%g,%g,%g) is too far from neutral.", 
+        log.string( ERROR, "white XYZ=(%g,%g,%g) is too far from neutral (1,1,1). It does not map to the positive octant.", 
                         .white[1], .white[2], .white[3] )
         return(NULL)
         }
