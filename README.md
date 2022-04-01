@@ -1,7 +1,10 @@
 ## spacesXYZ
 
+<!---
 For interactive calculations using this package see:
 [**RGB and CIE and Munsell Color Calculator**](http://gluonics.com:85/converter.html)
+-->
+
 
 Possible future work:
 

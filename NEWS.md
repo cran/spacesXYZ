@@ -1,5 +1,12 @@
 # NEWS for **spacesXYZ** package
 
+
+### Version 1.2-1  [2022-04-01]
+
+* fixed bug in `DeltaE()` for `metric=1994`; thanks to Ben Jann
+* fixed some missing links in `CCT.Rd`
+
+
 ### Version 1.1-0  [2020-03-02]
 
 * added new vignette _Chromatic Adaptation_

@@ -197,7 +197,7 @@ CCTfromuv_native  <- function( uv, locus.list, strict )
         #   reduced the tolerance here, but still only takes about 8 iterations
         res = try( stats::uniroot( myfun, interval=miredInterval, uv=uv, tol=.Machine$double.eps^0.5 ),  silent=FALSE )
         
-        if( class(res) == "try-error" )    
+        if( inherits(res,"try-error" ) )    # class(res) == "try-error" )    
             {
             cat( 'stats::uniroot()  res = ', utils::str(res), '\n', file=stderr() )
             return( NA_real_ )
@@ -460,7 +460,7 @@ nativeFromRobertson <- function( CCT, locus.list )
 
         res = try( stats::uniroot( myfun, interval=miredInterval ),  silent=FALSE )
         
-        if( class(res) == "try-error" )    
+        if( inherits(res,"try-error" ) )    # class(res) == "try-error" )    
             {
             cat( 'stats::uniroot()  res = ', utils::str(res), '\n', file=stderr() )
             return( NULL )
@@ -555,7 +555,7 @@ nativeFromMcCamy <- function( CCT, locus.list )
     #   the following interval comes from playing around with the cubic
     res = try( stats::uniroot( ifun, interval=c(-1.91,1.28), tol=.Machine$double.eps^0.33 ), silent=FALSE )
     
-    if( class(res) == "try-error" )    
+    if( inherits(res,"try-error" ) )    # class(res) == "try-error" )    
         {
         cat( 'stats::uniroot()  res = ', utils::str(res), '\n', file=stderr() )
         return( NULL )
@@ -603,7 +603,7 @@ nativeFromMcCamy <- function( CCT, locus.list )
         {    
         res = try( stats::uniroot( myfun, interval=miredInterval, tol=.Machine$double.eps^0.33 ),  silent=FALSE )
         
-        if( class(res) == "try-error" )    
+        if( inherits(res,"try-error" ) )    # class(res) == "try-error" )    
             {
             cat( 'stats::uniroot()  res = ', utils::str(res), '\n', file=stderr() )
             return( NULL )

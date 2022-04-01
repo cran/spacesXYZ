@@ -1,9 +1,9 @@
 Package: spacesXYZ
 Type: Package
 Title: CIE XYZ and some of Its Derived Color Spaces
-Version: 1.1-1
+Version: 1.2-1
 Encoding: UTF-8
-Date: 2020-03-02
+Date: 2022-04-01
 Author: Glenn Davis [aut,cre]
 Maintainer: Glenn Davis <gdavis@gluonics.com>
 Description: Functions for converting among CIE XYZ, xyY, Lab, and Luv.
@@ -15,9 +15,10 @@ LazyLoad: yes
 LazyData: yes
 Depends: R (>= 3.2.0)
 Suggests: knitr, rmarkdown, microbenchmark
+Enhances: colorSpec
 Repository: CRAN
 VignetteBuilder: knitr
 BuildVignettes: yes
 NeedsCompilation: no
-Packaged: 2020-03-02 16:09:34 UTC; Glenn
-Date/Publication: 2020-03-02 17:00:06 UTC
+Packaged: 2022-04-01 00:30:49 UTC; Glenn
+Date/Publication: 2022-04-01 03:00:30 UTC

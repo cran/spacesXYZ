@@ -41,8 +41,9 @@ The names or rownames are set to the rownames of one of the input matrices.
 For \code{metric=1976}
 the distance is simply the Euclidean distance between the two points in Lab, see \cite{Hunt} p. 111.
 \cr
-For \code{metric=1994} the symmetric version is used, see \cite{Hunt} p. 670.
-There is an asymmetric version which is not available in this package.
+For \code{metric=1994} the symmetric variant is used, see \cite{Hunt} p. 670.
+There is an asymmetric variant which is not available in this package.
+The weighting coefficients are for \bold{graphic arts} (not for \bold{textiles}).
 \cr
 For \code{metric=2000} the distance is insanely complicated, see \cite{Hunt} p. 671.
 \cr

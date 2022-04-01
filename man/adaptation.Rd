@@ -75,7 +75,7 @@ Compare with \cite{Lindbloom}.}
 
 
 \note{
-Chromatic adaptation can be viewed as an Aristotelian analogy of proportions.
+Chromatic adaptation can be viewed as an Aristotelian Analogy of Proportions.
 For more about this, see the vignette
 \href{../doc/adaptation.html}{\bold{Chromatic Adaptation}}.
 }
@@ -107,7 +107,7 @@ Chromatic Adaptation.
 
 Pascale, Danny.
 A Review of RGB Color Spaces ...from xyY to R'G'B'.
-\url{http://www.babelcolor.com/download/A\%20review\%20of\%20RGB\%20color\%20spaces.pdf}.
+\url{https://babelcolor.com/index_htm_files/A\%20review\%20of\%20RGB\%20color\%20spaces.pdf}
 2003.
 
 Wikipedia.

@@ -38,7 +38,7 @@ The 31 uv values in the table are accurate to the given 5 decimal places
 The locus is parameterized directly by reciprocal color temperature (\eqn{10^6/T}),
 and therefore indirectly by \eqn{T}.
 We call either of these the \emph{native pameterization} of the locus.
-Put a link to the data.frame here.
+See \link[=RobertsonLocus]{Planckian Loci}.
 The lines that are perpendicular to the locus are called the \emph{native isotherms}.
 
 The second available locus is a quintic spline through 65 points (knots),
@@ -48,9 +48,8 @@ over the valid temperature interval [1000,\eqn{\infty}] K.
 For this one the 1st and 2nd derivatives were also computed,
 so the normal vectors at the knots are accurate,
 and the curve is also \eqn{C^2}.
-Put a link to the data.frame here.
-The lines that are perpendicular to the locus are also called the 
-\emph{native isotherms}.
+See \link[=RobertsonLocus]{Planckian Loci}.
+The lines that are perpendicular to the locus are also called the \emph{native isotherms}.
 
 Two more families of isotherms are available.
 The \cite{Robertson} isotherms are tabulated just like the points on the locus,

@@ -44,7 +44,7 @@ quinticfun <- function( x, y, yp, ypp )
         rhs = c( y[i+1]-y[i] - bvec[2]*a[2] - b*a[1], yp[i+1] - b*2*a[2] - a[1], ypp[i+1] - 2*a[2] )
         sol = base::solve( mat, rhs )
         
-        if (class(sol) == "class-error")
+        if( inherits(sol,"try-error" ) )    #class(sol) == "class-error")
             {
             log.string( ERROR, "Failure of 3x3 solve()." )
             return(NULL)
