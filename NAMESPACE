@@ -1,6 +1,9 @@
 
-exportClasses(CAT)
+## exports
 export(CAT)         # the constructor of CAT
+
+# exportClasses(CAT)    # apparently only for S4 classes, Jan 2024
+
 
 ## methods for class CAT
 S3method(adaptXYZ,CAT)

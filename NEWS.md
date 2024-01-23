@@ -1,6 +1,11 @@
 # NEWS for **spacesXYZ** package
 
 
+### Version 1.3-0  [2024-01-23]
+
+* removed `exportClasses()` from `NAMESPACE`
+
+
 ### Version 1.2-1  [2022-04-01]
 
 * fixed bug in `DeltaE()` for `metric=1994`; thanks to Ben Jann

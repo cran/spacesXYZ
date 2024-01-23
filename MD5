@@ -1,6 +1,6 @@
-750624fad54ea628154c905479f158ea *DESCRIPTION
-0e4345eb8fec3563cf35787dbdcbe271 *NAMESPACE
-e187e65c36658b0179bd7773b966bf8c *NEWS.md
+340f2958d356be18f8191902a8c4003f *DESCRIPTION
+7d681ef55c3056e8ccccccd555847aae *NAMESPACE
+101956712dd01f7951c4b131a1ed1eb1 *NEWS.md
 8d940006d205f406b6c69316645435f2 *R/CCT.R
 cdb36bd2b3e9b9970e1edc970f7902cf *R/DeltaE.R
 59700a5097ffb92b14f1a699c7a28b79 *R/adaptation.R
@@ -15,13 +15,13 @@ cf5ad274c6dd345c6a6ec1a9959b0b4a *R/daylight.R
 e9dc37c502904a4e698e1de9efadeaea *R/sysdata.rda
 01ee34cdd5e45684b03ca3371823fe53 *R/utils.R
 983340d0f9ca97555662c0e84f7bd2c0 *README.md
-1a9383e05ddec13aeaeff9ff3c46a676 *build/vignette.rds
+5f2a87485c1712cce59558f2569c1f29 *build/vignette.rds
 e34487ec8d64085183f9b80a305af231 *data/spacesXYZ.rda
 43acc1a8ddb40f382217fcc9bf6df30f *inst/doc/adaptation.R
 4b9f8b9de0c9b3e2aa14710febe57ba0 *inst/doc/adaptation.Rmd
-74b6ac187faee4d624db152e2ce2f1fe *inst/doc/adaptation.html
+d898bfd6858e69856b7db0ffefa9c205 *inst/doc/adaptation.html
 7efd4e2ece2b8b2a572d0dd409961011 *inst/doc/isotherms.R
-132159f5c1a04bd5ba5b176a1f75811c *inst/doc/isotherms.pdf
+a9f45e67be171e9382562b23e595a868 *inst/doc/isotherms.pdf
 e43acd1b9c771ccce3fee8560034599b *inst/doc/isotherms.rnw
 f66b7469f39a1ca4cb30f27982e9a36b *inst/extdata/ciede2000testdata.txt
 ac0ad4ffb1cb16ccc8faf9ea0f9dc32b *inst/extdata/ciexyz31_1.csv

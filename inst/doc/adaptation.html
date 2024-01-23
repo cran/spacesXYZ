@@ -12,7 +12,7 @@
 
 <meta name="author" content="Glenn Davis" />
 
-<meta name="date" content="2022-03-31" />
+<meta name="date" content="2024-01-22" />
 
 <title>Chromatic Adaptation</title>
 
@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
     </style>
+
 
 
 <style type="text/css">
@@ -121,13 +122,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -355,7 +363,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Chromatic Adaptation</h1>
 <h4 class="author">Glenn Davis</h4>
-<h4 class="date">2022-03-31</h4>
+<h4 class="date">2024-01-22</h4>
 
 
 <div id="TOC">
@@ -598,7 +606,7 @@ In practice <code>Ma</code> is the unknown so we do not have it, but we <em>do</
 ## [1,]  0.7328 0.4296 -0.1624
 ## [2,] -0.7036 1.6975  0.0061
 ## [3,]  0.0030 0.0136  0.9834</code></pre>
-<pre><code>## [1] 1.998401e-15</code></pre>
+<pre><code>## [1] 1.776357e-15</code></pre>
 <p>We have recovered <span class="math inline">\(M_a\)</span> with good accuracy.</p>
 <p>Now suppose <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are <em>not</em> known, but <span class="math inline">\(M_a\)</span> <em>is</em> known to be in a small list of candidate matrices. Since there only 6 possible permutations that take matrix <code>X</code> to the right candidate, it will be easy to spot the right one.</p>
 <p><br><br></p>
@@ -606,28 +614,33 @@ In practice <code>Ma</code> is the unknown so we do not have it, but we <em>do</
 <div id="session-information" class="section level1">
 <h1>Session Information</h1>
 <pre>
-R version 4.1.3 (2022-03-10)
+R version 4.3.2 (2023-10-31 ucrt)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 19044)
+Running under: Windows 10 x64 (build 19045)
 
 Matrix products: default
 
+
 locale:
-[1] LC_COLLATE=C                           LC_CTYPE=English_United States.1252   
-[3] LC_MONETARY=English_United States.1252 LC_NUMERIC=C                          
-[5] LC_TIME=English_United States.1252    
+[1] LC_COLLATE=C                           LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: America/New_York
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] spacesXYZ_1.2-1
+[1] spacesXYZ_1.3-0
 
 loaded via a namespace (and not attached):
- [1] microbenchmark_1.4.9 compiler_4.1.3       magrittr_2.0.1       fastmap_1.1.0       
- [5] htmltools_0.5.2      tools_4.1.3          yaml_2.2.1           stringi_1.7.5       
- [9] rmarkdown_2.11       knitr_1.37           stringr_1.4.0        digest_0.6.28       
-[13] xfun_0.28            rlang_0.4.12         evaluate_0.14       
+ [1] digest_0.6.31         R6_2.5.1              microbenchmark_1.4.10 fastmap_1.1.1        
+ [5] xfun_0.39             cachem_1.0.8          knitr_1.42            htmltools_0.5.5      
+ [9] rmarkdown_2.21        cli_3.6.1             sass_0.4.6            jquerylib_0.1.4      
+[13] compiler_4.3.2        tools_4.3.2           evaluate_0.21         bslib_0.4.2          
+[17] yaml_2.3.7            rlang_1.1.1           jsonlite_1.8.4       
 </pre>
 </div>
 
