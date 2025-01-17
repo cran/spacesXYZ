@@ -1,5 +1,9 @@
   
   
+############    public/exported data   ###########
+#
+#   RobertsonLocus      table read from dataCCT.txt
+#   PrecisionLocus      computed from first principles: Planck radiator and xyz1931.1nm
 
 saveDatasets  <- function( .path="../data/spacesXYZ.rda" )
     {
@@ -24,6 +28,7 @@ saveDatasets  <- function( .path="../data/spacesXYZ.rda" )
   
 
 ############    private data   ###########
+#
 #   p.dataIlluminants       standard illuminants, with 'standardized' XYZ
 #   p.Ma                    3x3 adaptation matrices
 #   p.dataCCT               Robertson table for CCT

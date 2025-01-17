@@ -11,13 +11,13 @@ daylightLocus <-  function( temperature, space=1931 )
     ok  = is.numeric(temperature) && 0<length(temperature)
     if( ! ok )
         {
-        log.string( ERROR, "temperature='%s' is invalid.  It must be a numeric vector with positive length.", as.character(temperature) )
+        log_level( ERROR, "temperature='%s' is invalid.  It must be a numeric vector with positive length.", as.character(temperature) )
         return(NULL)
         }
     
     if( ! match(space,c(1960,1976,1931),nomatch=FALSE) )
         {
-        log.string( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
+        log_level( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
         return(NULL)
         }
         

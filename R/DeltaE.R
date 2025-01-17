@@ -24,7 +24,7 @@ DeltaE  <-  function( Lab1, Lab2, metric=1976 )
 
     if( nrow(Lab1) != nrow(Lab2) )
         {
-        log.string( ERROR, "nrow(Lab1) = %d != %d = nrow(Lab2).",
+        log_level( ERROR, "nrow(Lab1) = %d != %d = nrow(Lab2).",
                             nrow(Lab1), nrow(Lab2) )
         return(NULL)
         }
@@ -44,7 +44,7 @@ DeltaE  <-  function( Lab1, Lab2, metric=1976 )
     if( length(idx.metric)==0  ||  any(idx.metric==0) )
         {
         metric  = metric[ idx.metric==0 ]
-        log.string( ERROR, "metric='%s' is invalid.", metric )
+        log_level( ERROR, "metric='%s' is invalid.", metric )
         return( NULL )
         }
 

@@ -1,6 +1,13 @@
 # NEWS for **spacesXYZ** package
 
 
+
+
+### Version 1.4-0  [2025-01-17]
+
+* moved logging to package `logger`, which an Import
+
+
 ### Version 1.3-0  [2024-01-23]
 
 * removed `exportClasses()` from `NAMESPACE`

@@ -41,7 +41,7 @@ CCTfromuv  <- function( uv, isotherms='robertson', locus='robertson', strict=FAL
     #   process isotherms    
     if( length(isotherms) == 0 )
         {
-        log.string( ERROR, "isotherms is invalid, because length(isotherms)=0."  )
+        log_level( ERROR, "isotherms is invalid, because length(isotherms)=0."  )
         return( NULL )
         }      
         
@@ -54,7 +54,7 @@ CCTfromuv  <- function( uv, isotherms='robertson', locus='robertson', strict=FAL
     idx.isotherms   = pmatch( tolower(isotherms), tolower(isofull), nomatch=0, duplicates.ok=TRUE )
     if( any( idx.isotherms==0 ) )
         {
-        log.string( ERROR, "isotherms='%s' is invalid.", isotherms[idx.isotherms==0] )
+        log_level( ERROR, "isotherms='%s' is invalid.", isotherms[idx.isotherms==0] )
         return( NULL )
         }            
         
@@ -62,7 +62,7 @@ CCTfromuv  <- function( uv, isotherms='robertson', locus='robertson', strict=FAL
     ok  = is.character(locus)  &&  length(locus)==1
     if( ! ok )
         {
-        log.string( ERROR, "Argument locus is invalid.  It must be a character vector with length 1." )
+        log_level( ERROR, "Argument locus is invalid.  It must be a character vector with length 1." )
         return(NULL)
         }
 
@@ -71,7 +71,7 @@ CCTfromuv  <- function( uv, isotherms='robertson', locus='robertson', strict=FAL
     idx.locus   = pmatch( tolower(locus), tolower(locusfull), nomatch=0 )
     if( idx.locus == 0 )
         {
-        log.string( ERROR, "locus='%s' is invalid.", as.character(locus) )
+        log_level( ERROR, "locus='%s' is invalid.", as.character(locus) )
         return( NULL )
         }            
 
@@ -145,7 +145,7 @@ CCTfromuv_native  <- function( uv, locus.list, strict )
     {
     if( any( is.na(uv) ) )  return(NA_real_)
     
-    #   log.string( TRACE, "uv=%g,%g", uv[1], uv[2] )
+    #   log_level( TRACE, "uv=%g,%g", uv[1], uv[2] )
     #   print( str(locus.list) )
     
     
@@ -181,7 +181,7 @@ CCTfromuv_native  <- function( uv, locus.list, strict )
     if( 0 < f1 * f2 )    
         {
         #   same sign, uv is invalid
-        log.string( WARN, "uv=%g,%g is in invalid region.  CCT cannot be calculated.", uv[1], uv[2] )
+        log_level( WARN, "uv=%g,%g is in invalid region.  CCT cannot be calculated.", uv[1], uv[2] )
         return( NA_real_ )
         }
         
@@ -191,7 +191,7 @@ CCTfromuv_native  <- function( uv, locus.list, strict )
         mired.end = miredInterval[2]
     else 
         {
-        #log.string( DEBUG, "stats::uniroot() on interval [%g,%g],    endpoint values %g and %g.", 
+        #log_level( DEBUG, "stats::uniroot() on interval [%g,%g],    endpoint values %g and %g.", 
         #                        miredInterval[1], miredInterval[2],  f1, f2 )
         
         #   reduced the tolerance here, but still only takes about 8 iterations
@@ -205,7 +205,7 @@ CCTfromuv_native  <- function( uv, locus.list, strict )
             
         mired.end   = res$root   
         
-        #log.string( DEBUG, "stats::uniroot() successful after %d iterations.  mired.end=%g", res$iter, mired.end )
+        #log_level( DEBUG, "stats::uniroot() successful after %d iterations.  mired.end=%g", res$iter, mired.end )
         }
 
     #   temp.end   = res$root
@@ -219,7 +219,7 @@ CCTfromuv_native  <- function( uv, locus.list, strict )
         
         if( 0.05 < dist )
             {
-            log.string( WARN, "uv=%g,%g is invalid, because its distance to the Planckian locus = %.7f > 0.05.  (mired=%g)",
+            log_level( WARN, "uv=%g,%g is invalid, because its distance to the Planckian locus = %.7f > 0.05.  (mired=%g)",
                                 uv[1], uv[2], dist, mired.end )
             return( NA_real_ )
             }        
@@ -258,7 +258,7 @@ CCTfromuv_Robertson  <- function( uv, locus.list, strict )
         test    = sqrt( sum(offset*offset) )
         if( 0.05 < test )
             {
-            log.string( WARN, "uv=%g,%g is invalid, because its distance to the Planckian locus = %g > 0.05.  (mired=%g)",
+            log_level( WARN, "uv=%g,%g is invalid, because its distance to the Planckian locus = %g > 0.05.  (mired=%g)",
                                 uv[1], uv[2], test, mired )
             return( NA_real_ )
             }
@@ -294,7 +294,7 @@ miredfromuv_Robertson_nocheck  <- function( uv, extrap=FALSE )
             return( p.dataCCT$mired[idx] )
         
         #   more than 1 should not happen
-        log.string( WARN, "uv=%g,%g lies on more than 1 isotherm. Mired cannot be calculated.", uv[1], uv[2] )
+        log_level( WARN, "uv=%g,%g lies on more than 1 isotherm. Mired cannot be calculated.", uv[1], uv[2] )
         return( NA_real_ )
         }
 
@@ -306,7 +306,7 @@ miredfromuv_Robertson_nocheck  <- function( uv, extrap=FALSE )
         #   all di must be pos or neg
         if( ! extrap )
             {
-            log.string( WARN, "uv=%g,%g is in invalid region. Found no zero-crossings. Mired cannot be calculated.", uv[1], uv[2] )
+            log_level( WARN, "uv=%g,%g is in invalid region. Found no zero-crossings. Mired cannot be calculated.", uv[1], uv[2] )
             return( NA_real_ )
             }        
             
@@ -318,7 +318,7 @@ miredfromuv_Robertson_nocheck  <- function( uv, extrap=FALSE )
         }
     else if( 2 <= length(idx) )        #     ||  i==1 ) ?
         {
-        log.string( WARN, "uv=%g,%g is in invalid region. Found multiple zero-crossings. Mired cannot be calculated.", uv[1], uv[2] )
+        log_level( WARN, "uv=%g,%g is in invalid region. Found multiple zero-crossings. Mired cannot be calculated.", uv[1], uv[2] )
         return( NA_real_ )
         }        
         
@@ -356,7 +356,7 @@ nativeFromRobertson <- function( CCT, locus.list )
     
     if( j == 0 )
         {
-        log.string( WARN, "CCT=%g is out of the Robertson LUT range. mired < %g", CCT, p.dataCCT$mired[1] )
+        log_level( WARN, "CCT=%g is out of the Robertson LUT range. mired < %g", CCT, p.dataCCT$mired[1] )
         return(NULL)
         }
             
@@ -369,7 +369,7 @@ nativeFromRobertson <- function( CCT, locus.list )
         epsilon = 1.e-12
         if( p.dataCCT$mired[n] + epsilon  <  mired )
             {
-            log.string( WARN, "CCT=%g is outside the Robertson LUT range. %g < %g mired", 
+            log_level( WARN, "CCT=%g is outside the Robertson LUT range. %g < %g mired", 
                             CCT, p.dataCCT$mired[n], mired )
             return(NULL)
             }     
@@ -385,7 +385,7 @@ nativeFromRobertson <- function( CCT, locus.list )
         {
         #   special case, CCT is at one of the defining isotherms.
         #   The root is at the endpoint, so avoid using uniroot().
-        #log.string( DEBUG, "mired=%g exactly. isotherm %d.  uniroot unnecessary.", mired, j )
+        #log_level( DEBUG, "mired=%g exactly. isotherm %d.  uniroot unnecessary.", mired, j )
         
         out$uv  = c( p.dataCCT$u[j], p.dataCCT$v[j] )
         out$CCT = CCT      
@@ -444,7 +444,7 @@ nativeFromRobertson <- function( CCT, locus.list )
     if( 0 < f1 * f2 )    
         {
         #   same sign, should not happen
-        log.string( WARN, "CCT=%g  mired=%g  p=%g,%g.  norm=%g,%g. Test function has the same sign at endpoints [%g,%g]. %g and %g CCT cannot be calculated.", 
+        log_level( WARN, "CCT=%g  mired=%g  p=%g,%g.  norm=%g,%g. Test function has the same sign at endpoints [%g,%g]. %g and %g CCT cannot be calculated.", 
                                 CCT, mired, p[1], p[2], norm[1], norm[2], miredInterval[1], miredInterval[2], f1, f2  )
         return( NULL )
         }
@@ -455,7 +455,7 @@ nativeFromRobertson <- function( CCT, locus.list )
         mired.end = miredInterval[2]    
     else
         {
-        #log.string( DEBUG, "stats::uniroot() on interval [%g,%g], isotherms=%d and %d.  endpoint values %g and %g.", 
+        #log_level( DEBUG, "stats::uniroot() on interval [%g,%g], isotherms=%d and %d.  endpoint values %g and %g.", 
         #                        rangeMired[1], rangeMired[2], i, i+1, myfun(rangeMired[1],CCT), myfun(rangeMired[2],CCT)  )
 
         res = try( stats::uniroot( myfun, interval=miredInterval ),  silent=FALSE )
@@ -469,7 +469,7 @@ nativeFromRobertson <- function( CCT, locus.list )
         mired.end = res$root
         }
         
-    #log.string( DEBUG, "stats::uniroot() successful after %d iterations.  isotherm %d", res$iter, i )
+    #log_level( DEBUG, "stats::uniroot() successful after %d iterations.  isotherm %d", res$iter, i )
 
     out$uv      = c( locus.list$ufun( mired.end ), locus.list$vfun( mired.end ) )
     out$CCT     = 1.e6 / mired.end
@@ -522,7 +522,7 @@ CCTfromxy_McCamy  <- function( xy, locus.list, strict )
         dist    = sqrt( sum(offset^2) )
         if( 0.05 < dist )
             {
-            log.string( WARN, "uv=%g,%g is invalid, because its distance to the Planckian locus = %g > 0.05.  CCT=%g",
+            log_level( WARN, "uv=%g,%g is invalid, because its distance to the Planckian locus = %g > 0.05.  CCT=%g",
                                 uv[1], uv[2], dist, CCT  )
             return( NA_real_ )
             }
@@ -560,7 +560,7 @@ nativeFromMcCamy <- function( CCT, locus.list )
         cat( 'stats::uniroot()  res = ', utils::str(res), '\n', file=stderr() )
         return( NULL )
         }        
-    # log.string( DEBUG, "stats::uniroot() inverted McCamy cubic successful after %d iterations.", res$iter )
+    # log_level( DEBUG, "stats::uniroot() inverted McCamy cubic successful after %d iterations.", res$iter )
     
     #   find equation of the McCamy isotherm for this CCT
     alpha   = res$root        
@@ -581,7 +581,7 @@ nativeFromMcCamy <- function( CCT, locus.list )
         
     miredInterval    = locus.list$miredInterval    # range( p.dataCCT$mired )
         
-    #   log.string( DEBUG, "myfun() at endpoints: %g and %g.", myfun(miredInterval[1],CCT), myfun(miredInterval[2],CCT) )
+    #   log_level( DEBUG, "myfun() at endpoints: %g and %g.", myfun(miredInterval[1],CCT), myfun(miredInterval[2],CCT) )
     
     #   check endpoint values
     f1  = myfun( miredInterval[1] )
@@ -590,7 +590,7 @@ nativeFromMcCamy <- function( CCT, locus.list )
     if( 0 < f1 * f2 )    
         {
         #   same sign, should not happen
-        log.string( WARN, "CCT=%g.  Test function has the same sign at endpoints [%g,%g]. %g and %g. Intersection of isotherm and locus cannot be calculated.", 
+        log_level( WARN, "CCT=%g.  Test function has the same sign at endpoints [%g,%g]. %g and %g. Intersection of isotherm and locus cannot be calculated.", 
                                 CCT,  miredInterval[1], miredInterval[2], f1, f2  )
         return( NULL )
         }
@@ -608,7 +608,7 @@ nativeFromMcCamy <- function( CCT, locus.list )
             cat( 'stats::uniroot()  res = ', utils::str(res), '\n', file=stderr() )
             return( NULL )
             }        
-        # log.string( DEBUG, "stats::uniroot() found mired.end after %d iterations, for McCamy.", res$iter )
+        # log_level( DEBUG, "stats::uniroot() found mired.end after %d iterations, for McCamy.", res$iter )
         
         mired.end   = res$root
         }
@@ -643,7 +643,7 @@ planckLocus  <- function( temperature, locus='robertson', param='robertson', del
     ok  = is.numeric(temperature)  &&  0<length(temperature)
     if( ! ok )
         {
-        log.string( ERROR, "Argument temperature is invalid.  It must be a numeric vector with positive length."  )
+        log_level( ERROR, "Argument temperature is invalid.  It must be a numeric vector with positive length."  )
         return(NULL)
         }
 
@@ -651,7 +651,7 @@ planckLocus  <- function( temperature, locus='robertson', param='robertson', del
     ok  = is.character(locus)  &&  length(locus)==1
     if( ! ok )
         {
-        log.string( ERROR, "Argument locus is invalid.  It must be a character vector with length 1." )
+        log_level( ERROR, "Argument locus is invalid.  It must be a character vector with length 1." )
         return(NULL)
         }
 
@@ -660,7 +660,7 @@ planckLocus  <- function( temperature, locus='robertson', param='robertson', del
     idx.locus   = pmatch( tolower(locus), tolower(locusfull), nomatch=0 )
     if( idx.locus == 0 )
         {
-        log.string( ERROR, "locus='%s' is invalid.", as.character(locus) )
+        log_level( ERROR, "locus='%s' is invalid.", as.character(locus) )
         return( NULL )
         }    
 
@@ -673,7 +673,7 @@ planckLocus  <- function( temperature, locus='robertson', param='robertson', del
     #   process param
     if( length(param) != 1 )
         {
-        log.string( ERROR, "param is invalid, because it has length=%d != 1.", length(param)  )
+        log_level( ERROR, "param is invalid, because it has length=%d != 1.", length(param)  )
         return( NULL )
         }        
         
@@ -685,7 +685,7 @@ planckLocus  <- function( temperature, locus='robertson', param='robertson', del
     idx.param  = pmatch( tolower(param), tolower(paramfull), nomatch=0 )
     if( idx.param == 0 )
         {
-        log.string( ERROR, "param='%s' is invalid.", param  )
+        log_level( ERROR, "param='%s' is invalid.", param  )
         return( NULL )
         }
     
@@ -695,7 +695,7 @@ planckLocus  <- function( temperature, locus='robertson', param='robertson', del
     ok  = is.numeric(delta)  &&  length(delta) %in% c(1,n)
     if( ! ok )
         {
-        log.string( ERROR, "Argument delta is invalid.  It must be a numeric vector with length 1 or %d.", n  )
+        log_level( ERROR, "Argument delta is invalid.  It must be a numeric vector with length 1 or %d.", n  )
         return(NULL)
         }
     if( length(delta) == 1 )    delta = rep( delta[1], n )
@@ -703,7 +703,7 @@ planckLocus  <- function( temperature, locus='robertson', param='robertson', del
     #   process space    
     if( ! match(space,c(1960,1976,1931),nomatch=FALSE) )
         {
-        log.string( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
+        log_level( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
         return(NULL)
         }    
     

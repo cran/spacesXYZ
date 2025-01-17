@@ -13,7 +13,7 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
     ok  = is.numeric(source.XYZ)  &&  length(source.XYZ)==3  &&  all( is.finite(source.XYZ) )
     if( ! ok )
         {
-        log.string( ERROR, "source.XYZ='%s' is invalid.", as.character(source.XYZ[1]) )
+        log_level( ERROR, "source.XYZ='%s' is invalid.", as.character(source.XYZ[1]) )
         return(NULL)
         }    
         
@@ -23,7 +23,7 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
     ok  = is.numeric(target.XYZ)  &&  length(target.XYZ)==3  &&  all( is.finite(target.XYZ) )
     if( ! ok )
         {
-        log.string( ERROR, "target.XYZ='%s' is invalid.", as.character(target.XYZ[1]) )
+        log_level( ERROR, "target.XYZ='%s' is invalid.", as.character(target.XYZ[1]) )
         return(NULL)
         }   
     
@@ -35,7 +35,7 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
         idx     = pmatch( tolower(method[1]), tolower(full) )
         if( is.na(idx) )
             {
-            log.string( ERROR, "method='%s' is invalid.", method )
+            log_level( ERROR, "method='%s' is invalid.", method )
             return(NULL)
             }    
 
@@ -48,7 +48,7 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
         ok  = is.matrix(method)  &&  all( dim(method)==c(3,3) )
         if( ! ok )
             {
-            log.string( ERROR, "numeric method is invalid. It must be a 3x3 cone response matrix." )
+            log_level( ERROR, "numeric method is invalid. It must be a 3x3 cone response matrix." )
             return(NULL)
             }
             
@@ -61,7 +61,7 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
         tol     = 1.e-6
         if( rcond(Ma) < tol )
             {
-            log.string( ERROR, "method = cone response matrix invalid, because the matrix is not invertible. rcond=%g < %g", test, tol  )
+            log_level( ERROR, "method = cone response matrix invalid, because the matrix is not invertible. rcond=%g < %g", test, tol  )
             return(NULL)
             }
             
@@ -69,7 +69,7 @@ CAT <- function( source.XYZ, target.XYZ, method="Bradford" )
         }
     else
         {
-        log.string( ERROR, "method is neither character nor numeric. typeof(method)=%s.", typeof(method) )
+        log_level( ERROR, "method is neither character nor numeric. typeof(method)=%s.", typeof(method) )
         return(NULL)
         }
 
@@ -162,7 +162,7 @@ adaptxyY.CAT  <-  function( x, xyY.src )
         xyY.tgt[neutral,1] = x$target.xyY[1]
         xyY.tgt[neutral,2] = x$target.xyY[2]
         
-        #   log.string( DEBUG, "%d neutrals (of %d) given special treatment.",   sum(neutral), length(neutral) )
+        #   log_level( DEBUG, "%d neutrals (of %d) given special treatment.",   sum(neutral), length(neutral) )
         }
     
     return( xyY.tgt )
@@ -231,7 +231,7 @@ partialAdaptationMatrix  <-  function( .Ma, .white )
     
     if( any( lms<=0 ) )
         {
-        log.string( ERROR, "white XYZ=(%g,%g,%g) is too far from neutral (1,1,1). It does not map to the positive octant.", 
+        log_level( ERROR, "white XYZ=(%g,%g,%g) is too far from neutral (1,1,1). It does not map to the positive octant.", 
                         .white[1], .white[2], .white[3] )
         return(NULL)
         }

@@ -31,15 +31,15 @@ prepareNxM  <-  function( A, M=3 )
         #print( sys.frames() )
         mess    = substr( as.character(A)[1], 1, 10 )
         #arglist = list( ERROR, "A must be a non-empty numeric Nx3 matrix (with N>0). A='%s...'", mess )
-        #do.call( log.string, arglist, envir=parent.frame(n=3) )
-        #myfun   = log.string
+        #do.call( log_level, arglist, envir=parent.frame(n=3) )
+        #myfun   = log_level
         #environment(myfun) = parent.frame(3)
         
         Aname = deparse(substitute(A))        
         
-        #   notice hack to make log.string() print name of parent function        
-        log.string( c(ERROR,2L), "Argument '%s' must be a non-empty numeric Nx%d matrix (with N>0). %s='%s...'", 
-                                    Aname, M, Aname, mess )
+        #   notice hack to make log_level() print name of parent function, and *NOT* prepareNxM()        
+        log_level( ERROR, "Argument '%s' must be a non-empty numeric Nx%d matrix (with N>0). %s='%s...'", 
+                                    Aname, M, Aname, mess, .topcall=sys.call(-1L) )
         return(NULL)
         }
     

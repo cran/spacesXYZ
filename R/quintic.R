@@ -17,14 +17,14 @@ quinticfun <- function( x, y, yp, ypp )
     ok  = 2<=n  &&  length(y)==n  &&  length(yp)==n  &&  length(ypp)==n
     if( ! ok )
         {
-        log.string( ERROR, "Invalid lengths." )
+        log_level( ERROR, "Invalid lengths." )
         return(NULL)
         }
         
     ok  = all( 0 < diff(x) )
     if( ! ok )
         {
-        log.string( ERROR, "x is not strictly increasing." )
+        log_level( ERROR, "x is not strictly increasing." )
         return(NULL)
         }
         
@@ -46,7 +46,7 @@ quinticfun <- function( x, y, yp, ypp )
         
         if( inherits(sol,"try-error" ) )    #class(sol) == "class-error")
             {
-            log.string( ERROR, "Failure of 3x3 solve()." )
+            log_level( ERROR, "Failure of 3x3 solve()." )
             return(NULL)
             }
         
@@ -59,14 +59,14 @@ quinticfun <- function( x, y, yp, ypp )
         ok  = is.numeric(xin)  &&  0<length(xin)
         if( ! ok )
             {
-            log.string( ERROR, "xin is invalid." )
+            log_level( ERROR, "xin is invalid." )
             return(NULL)
             }      
 
         ok  = deriv %in% c(0,1,2)
         if( ! ok )
             {
-            log.string( ERROR, "deriv is invalid." )
+            log_level( ERROR, "deriv is invalid." )
             return(NULL)
             }      
         

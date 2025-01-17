@@ -32,7 +32,7 @@ xyYfromXYZ <- function( XYZ )
         #   but do not warn if X=Y=Z=0.  This is the pure-black special case.
         warn = warn  &  0<.rowSums( XYZ*XYZ, nrow(XYZ), 3 )
         if( any(warn,na.rm=TRUE) )
-            log.string( WARN, "%d of %d XYZ vectors could not be transformed, because X+Y+Z==0.",    
+            log_level( WARN, "%d of %d XYZ vectors could not be transformed, because X+Y+Z==0.",    
                                     sum(warn,na.rm=TRUE), length(warn) )
         }
         
@@ -67,7 +67,7 @@ XYZfromxyY <- function( xyY )
             
     warn    = is.finite(xyY[ ,1]) &  y0  &  ! Y0
     if( any(warn,na.rm=TRUE) )
-        log.string( WARN, "%d of %d xyY vectors could not be transformed because y==0.", 
+        log_level( WARN, "%d of %d xyY vectors could not be transformed because y==0.", 
                     sum(warn,na.rm=TRUE), length(warn) )
 
     return( XYZ )
@@ -105,7 +105,7 @@ LabfromXYZ <- function( XYZ, white )
     ok  = is.numeric(white)  &&  length(white)==3  &&  all( 0 < white )
     if( ! ok )
         {
-        log.string( ERROR, "white='%s' is invalid.", as.character(white) )
+        log_level( ERROR, "white='%s' is invalid.", as.character(white) )
         return(NULL)
         }            
 
@@ -144,7 +144,7 @@ XYZfromLab    <- function( Lab, white )
     ok  = is.numeric(white)  &&  length(white)==3  &&  all( 0 < white )
     if( ! ok )
         {
-        log.string( ERROR, "white='%s' is invalid.", as.character(white) )
+        log_level( ERROR, "white='%s' is invalid.", as.character(white) )
         return(NULL)
         }            
     
@@ -180,7 +180,7 @@ LuvfromXYZ <- function( XYZ, white )
     ok  = is.numeric(white)  &&  length(white)==3  &&  all( 0 < white )
     if( ! ok )
         {
-        log.string( ERROR, "white='%s' is invalid.", as.character(white) )
+        log_level( ERROR, "white='%s' is invalid.", as.character(white) )
         return(NULL)
         }            
         
@@ -226,7 +226,7 @@ XYZfromLuv <- function( Luv, white )
     ok  = is.numeric(white)  &&  length(white)==3  &&  all( 0 < white )
     if( ! ok )
         {
-        log.string( ERROR, "white='%s' is invalid.", as.character(white) )
+        log_level( ERROR, "white='%s' is invalid.", as.character(white) )
         return(NULL)
         }            
         
@@ -263,7 +263,7 @@ uvfromXYZ <- function( XYZ, space=1976 )
     
     if( ! match(space,c(1960,1976),nomatch=FALSE) )
         {
-        log.string( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
+        log_level( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
         return(NULL)
         }
     
@@ -274,7 +274,7 @@ uvfromXYZ <- function( XYZ, space=1976 )
     
     if( any(mask,na.rm=T) )
         {
-        log.string( WARN, "%d of %d XYZ vectors could not be transformed, because X + 15Y + 3Z <= 0.",
+        log_level( WARN, "%d of %d XYZ vectors could not be transformed, because X + 15Y + 3Z <= 0.",
                                 sum(mask,na.rm=T), length(mask) )
         denom[ mask ] = NA_real_                                
         }
@@ -303,7 +303,7 @@ uvfromxy <- function( xy, space=1976 )
     
     if( ! match(space,c(1960,1976,1931),nomatch=FALSE) )
         {
-        log.string( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
+        log_level( ERROR, "space='%s' is invalid.",  as.character(space[1]) )
         return(NULL)
         }
 
@@ -313,7 +313,7 @@ uvfromxy <- function( xy, space=1976 )
     
     if( any(mask,na.rm=T) )
         {
-        log.string( WARN, "%d of %d xy vectors could not be transformed, because -2x + 12y + 3 <= 0.",
+        log_level( WARN, "%d of %d xy vectors could not be transformed, because -2x + 12y + 3 <= 0.",
                                 sum(mask,na.rm=T), length(mask) )
         denom[ mask ] = NA_real_                                
         }

@@ -51,5 +51,6 @@ export( daylightLocus )
 export( standardXYZ,
         standardxy )
 
+import( logger )
 importFrom( utils, read.table, str )
 importFrom( stats, splinefun, uniroot )
