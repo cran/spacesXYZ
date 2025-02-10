@@ -1,6 +1,10 @@
 # NEWS for **spacesXYZ** package
 
 
+### Version 1.5-1  [2025-02-09]
+
+* added new functions `CIECAM02fromXYZ()` and `DeltaE_CAM02()`, for color appearance modeling
+* in function `planckLocus()`, changed the name of one argument
 
 
 ### Version 1.4-0  [2025-01-17]

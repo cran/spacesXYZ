@@ -27,14 +27,14 @@ temp = c( seq(2000,10000,by=1000), 2500, 20000, 30000, Inf )
 param = c('native','Robertson','McCamy') ; color = c('black','red','mediumseagreen')
 for( i in 1:3 ) {
 delta = 0.05 - (i-1)*0.00275
-top = planckLocus( temp, param=param[i], delta=delta )
-bot = planckLocus( temp, param=param[i], delta=-delta )
+top = planckLocus( temp, param=param[i], Duv=delta )
+bot = planckLocus( temp, param=param[i], Duv=-delta )
 segments( bot[ ,1], bot[,2], top[,1], top[,2], col=color[i], lwd=1 )
 if( i == 1 ) text( bot[ ,1], bot[,2], sprintf("%gK",temp), adj=c(0,1.2), cex=0.5 )
 }
 legend( 'bottomright', param, lwd=3, bty='n', col=color, inset=0.05 )
 
-## ----fig2, echo=TRUE, message=TRUE, fig.pos="H", fig.height=2.5, out.width='1.0\\linewidth', fig.cap='A Comparing the Robertson and McCamy parameterizations to the native parameterization.  This comparison is only along the Planckian locus.'----
+## ----fig2, echo=TRUE, message=TRUE, fig.pos="H", fig.height=2.5, out.width='1.0\\linewidth', fig.cap='Comparing the Robertson and McCamy parameterizations to the native parameterization.  This comparison is only along the Planckian locus.'----
 temp = sort( c( seq(2000,8000,by=100), 6667, 5714, 4444, 3636, 3333, 3077, 2857 ) )
 uv = planckLocus( temp, param='native' )
 diffRob = CCTfromuv( uv, isotherms='Robertson' ) - temp
@@ -42,8 +42,8 @@ diffMcC = CCTfromuv( uv, isotherms='McCamy' ) - temp
 par( omi=c(0,0,0,0), mai=c(0.5,0.6,0.1,0.1) )
 plot( range(temp), range(diffRob,diffMcC), type='n', las=1, tcl=0, xlab='', ylab='',
         lab=c(10,5,7), mgp=c(3,0.25,0) )
-title( xlab='native temperature K', line=1.5 )
-title( ylab='temperature delta K', line=1.8 )
+title( xlab='native CCT K', line=1.5 )
+title( ylab='CCT delta K', line=1.8 )
 grid( lty=1 ) ; abline( h=0 )
 lines( temp, diffRob, col=color[2] )
 lines( temp, diffMcC, col=color[3] )
@@ -65,8 +65,8 @@ points( uv1[1], uv1[2], pch=20, col='red' )
 lines( uv[ ,1], uv[ ,2], lwd=0.7 )  ;  points( uv[1,1], uv[1,2], pch=20, cex=0.5 )
 text( uv[1,1], uv[1,2], expression(infinity), adj=c(0.6,1.6), cex=1.5 )
 temp = c( seq(2000,10000,by=1000), 20000, 30000, Inf )
-top = planckLocus( temp, param=param[3], delta=0 )
-bot = planckLocus( temp, param=param[3], delta=-len )
+top = planckLocus( temp, param="mccamy", Duv=0 )
+bot = planckLocus( temp, param="mccamy", Duv=-len )
 segments( bot[ ,1], bot[,2], top[,1], top[,2], col=color[3], lwd=1 )
 text( top[ ,1], top[,2], sprintf("%gK",temp), adj=c(1,-0.2), cex=0.5 )
 legend( 'topleft', param[3], lwd=3, bty='n', col=color[3], inset=0.05 )
@@ -83,8 +83,8 @@ lines( uv[ ,1], uv[ ,2], lwd=0.7 )
 text( uv[1,1], uv[1,2], expression(infinity), adj=c(0.6,1.5), cex=1.5 )
 mired = c( seq(0,90,by=10), seq(100,600,by=25) )  # these are from Robertson's table
 temp = 1.e6 / mired
-top = planckLocus( temp, param='robertson', delta=0.1 )
-bot = planckLocus( temp, param='robertson', delta=-0.05 ) ;  off = bot - top
+top = planckLocus( temp, param='robertson', Duv=0.1 )
+bot = planckLocus( temp, param='robertson', Duv=-0.05 ) ;  off = bot - top
 lines( bot[ ,1], bot[ ,2], lty=2 ) ; center = matrix( 0, length(temp)-1, 2 )
 for( i in 1:(length(temp)-1) )  {
     A  = cbind( off[i,], off[i+1,] ) ;    s = solve( A, top[i+1,] - top[i,] )

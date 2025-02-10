@@ -49,3 +49,39 @@ prepareNxM  <-  function( A, M=3 )
     return( A )
     }
         
+    
+#   replicate rows in a data.frame, but preserve the same columns
+    
+repdf   <- function( df, times )
+    {
+    out = data.frame( row.names=1:(times*nrow(df)) )
+    
+    for( j in 1:ncol(df) )
+        {
+        if( is.matrix( df[[j]] ) )
+            out[[j]]    = matrix( t(df[[j]]), nrow=nrow(out), ncol=ncol(df[[j]]), byrow=TRUE )
+        else
+            out[[j]]    = rep( df[[j]], times )
+        }
+    
+    colnames(out)   = colnames(df)
+    
+    return( out )
+    }
+    
+    
+unitize <- function( x, tol=5.e-14 )
+    {
+    r2  = sum( x^2 )
+    if( r2 == 0 )    return( rep(NA_real_,length(x)) )
+
+    r   = sqrt(r2)
+
+    if( r <= tol )
+        {
+        log_level( WARN, "length of x is %g <= %g", r, tol )
+        }
+
+    return( x / r )
+    }
+    

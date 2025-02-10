@@ -49,21 +49,13 @@ p.uvQuinticsfromMired   = NULL      # a pair of quintic splines. Once created it
     {
     #   at this point all globals seem to be locked
 
-    #packageStartupMessage( ".onAttach() ", utils::str(p.uvCubicsfromMired), '\n' )     shows 2 functions OK
-
-    #packageStartupMessage( ".onAttach() ", p.microbenchmark , '\n' )             shows TRUE OK
-
-
-    # packageStartupMessage( ".onAttach() ", environmentIsLocked(asNamespace('spacesXYZ')), '\n', collapse=' ' )  a paradox the environment is locked !
-
-    #unlockBinding( "p.microbenchmark", asNamespace('spacesXYZ') )     # asNamespace(pkgname) here generates a NOTE !
-    #p.microbenchmark    <<- requireNamespace( 'microbenchmark', quietly=TRUE )  #;  cat( "p.microbenchmark=", p.microbenchmark, '\n' )
-
-    #   make 2 splinefuns here, because it is unsafe to save them in sysdata.rda
-    #unlockBinding( "p.uvCubicsfromMired", asNamespace('spacesXYZ') )            # asNamespace(pkgname) here generates a NOTE !
-    #p.uvCubicsfromMired       <<- list()
-    #p.uvCubicsfromMired[[1]]  <<- splinefun( p.dataCCT$mired, p.dataCCT$u, method='fmm' )     # for u CIE 1960
-    #p.uvCubicsfromMired[[2]]  <<- splinefun( p.dataCCT$mired, p.dataCCT$v, method='fmm' )     # for v CIE 1960
+    info    = library( help='spacesXYZ' )        #eval(pkgname)
+    info    = format( info )
+    mask    = grepl( "^(Version|Author|Built):", info )     #Title
+    info    = gsub( "[ ]+", ' ', info[mask] )
+    mess    = sprintf( "Attaching %s", pkgname )
+    mess    = paste( c( mess, info ), collapse='.  ' )   #; cat(mess)
+    packageStartupMessage( mess )
     }
 
 

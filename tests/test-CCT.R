@@ -3,13 +3,15 @@
 library( spacesXYZ )
 
 options( width=144 )
-    
+
 printf <- function( msg, ... )
-    {    
+    {
     mess = sprintf( msg[1], ... )    # should this really be msg[1] ?
     cat( mess, '\n' )   #, file=stderr() )
     }
-    
+
+
+#   temperature   ->   uv    ->    CCT    should have a small difference
 
 testRoundtrips.uv <- function( locus='robertson' )
     {
@@ -17,15 +19,15 @@ testRoundtrips.uv <- function( locus='robertson' )
 
     #   mat = matrix( c('robertson','robertson', 'mccamy','mccamy',  'native','native' ), 3, 2, byrow=TRUE )
     strict  = TRUE
-    
+
     for( iso in c('robertson', 'mccamy','native' ) )
         {
         if( iso == 'mccamy' )
-            #   1710 is about as low as McCamy can go        
+            #   1710 is about as low as McCamy can go
             temperature = c( 1710, seq(2000,33000,by=1000) )
         else
             temperature = c( 1667, seq(2000,33000,by=1000), 75000, Inf )
-        
+
         uv      = planckLocus( temperature, locus=locus, param=iso  )
         if( any( is.na(uv) ) )
             {
@@ -33,149 +35,160 @@ testRoundtrips.uv <- function( locus='robertson' )
             print( uv )
             return(FALSE)
             }
-        
+
         CCTback = CCTfromuv( uv, isotherm=iso,  locus=locus, strict=strict )
         if( any( is.na(CCTback) ) )
             {
             printf( "CCTfromuv() failed for isotherm='%s'.  It returned some NAs", iso )
             return(FALSE)
-            }        
-        
-        delta   = CCTback - temperature  ;   print(delta)
-        
+            }
+
+        delta   = CCTback - temperature  #;   print(delta)
+
         #   NaNs may come from Inf-Inf, so change them to 0s
         delta[ is.nan(delta) ] = 0
-        
+
         #printf( "testRoundtrips.uv()  param='%s'  max(abs(delta))=%g", iso, max(abs(delta) ) )
-        
-        tol = ifelse( iso=='native', 5.e-5, 5.e-2 )  
-        
+
+        tol = ifelse( iso=='native', 5.e-5, 5.e-2 )
+
         if( tol < max(abs(delta)) )
             {
-            printf( "testRoundtrips.uv().  Round-trip failed for param='%s' and isotherm='%s'.  max(abs(delta))=%g", 
+            printf( "testRoundtrips.uv().  Round-trip failed for param='%s' and isotherm='%s'.  max(abs(delta))=%g",
                                    iso, iso, max(abs(delta)) )
-            print(delta)                                   
+            print(delta)
             return(FALSE)
-            }  
+            }
         }
 
     printf( "testRoundtrips.uv('%s') passed.", locus )
-        
+
     return( TRUE )
     }
-    
-        
+
+
+
+
+#   temperature   ->   xy    ->    CCT    should have a small difference
+
 testRoundtrips.xy <- function()
     {
     printf( "\n---------------------  testRoundtrips.xy()  -----------------------" )
 
 
     strict  = TRUE
-    
+
     for( iso in c('robertson', 'mccamy','native' ) )
         {
         if( iso == 'mccamy' )
-            #   1710 is about as low as McCamy can go        
+            #   1710 is about as low as McCamy can go
             temperature = c( 1710, seq(2000,33000,by=1000) )
         else
             temperature = c( 1677, seq(2000,33000,by=1000), 75000, Inf )
-            
+
         xy      = planckLocus( temperature, param=iso, space=1931  )
         if( any( is.na(xy) ) )
             {
             printf( "xyfromTemperature() failed for param='%s'.  It returned some NAs", iso )
             return(FALSE)
             }
-        
+
         CCTback = CCTfromxy( xy, isotherm=iso, strict=strict )
         if( any( is.na(CCTback) ) )
             {
             printf( "CCTfromxy() failed for isotherm='%s'.  It returned some NAs", iso )
             return(FALSE)
-            }        
-        
+            }
+
         delta   = CCTback - temperature   #;   print(delta)
-        
+
         #   NaNs may come from Inf-Inf, so change them to 0s
         delta[ is.nan(delta) ] = 0
 
-        
+
         #printf( "testRoundtrips.xy()  param='%s'  max(abs(delta))=%g", iso, max(abs(delta) ) )
-                
+
         tol = ifelse( iso=='native', 5.e-5, 5.e-2 )
-        
+
         if( tol < max(abs(delta)) )
             {
-            printf( "testRoundtrips.xy().  Round-trip failed for param='%s' and isotherm='%s'.  max(abs(delta))=%g", 
+            printf( "testRoundtrips.xy().  Round-trip failed for param='%s' and isotherm='%s'.  max(abs(delta))=%g",
                                    iso, iso, max(abs(delta)) )
             print(delta)
             return(FALSE)
-            }  
+            }
         }
 
     printf( "testRoundtrips.xy() passed." )
-               
+
     return( TRUE )
     }
-    
+
 
 testStrictness <- function( locus='robertson' )
     {
-    printf( "\n---------------------  testStrictness('%s')  -----------------------", locus )    
-    
-    temperaturetest = c( 1800, seq(2000,33000,by=1000) )
-        
+    printf( "\n---------------------  testStrictness('%s')  -----------------------", locus )
+
+    temperaturetest =   c( 1800, seq(2000,33000,by=1000) )
+
     for( delta in c(-0.051,0.051) )  # above and below
         {
-        #   make some uv points just outside the valid band above the locus.  Though some will be outside the chromaticity diagram !        
-        uvoutside   = planckLocus( temperaturetest, locus, param='native', delta=delta )
-       
+        #   make some uv points just outside the valid band above the locus.  Though some will be outside the chromaticity diagram !
+        uvoutside   = planckLocus( temperaturetest, locus, param='native', Duv=delta )        # Duv
+
         #printf( "delta=%g", delta )
-        #print( uvoutside )   
-        
+        #print( uvoutside )
+
         for( isotherm in c('mccamy','robertson','native') )
             {
             #   first test with strict=FALSE, all should succeed.
             CCT = CCTfromuv( uvoutside, isotherm=isotherm, locus=locus, strict=FALSE )
             
+            #print( CCT )
+
             count   = sum( is.na(CCT) )
             if( 0 < count )
                 {
-                printf( "strict=FALSE test failed for %d of %d points too far from the locus.  delta=%g", 
+                printf( "strict=FALSE test failed for %d of %d points too far from the locus.  delta=%g",
                                 count, length(CCT), delta )
 
                 return(FALSE)
-                }  
+                }
 
-            #   now test with strict=TRUE, all should fail. 
+            #   now test with strict=TRUE, all should fail.
             CCT = CCTfromuv( uvoutside, isotherm=isotherm, locus=locus, strict=TRUE )
-       
-            count   = sum( ! is.na(CCT) )            
+
+            #print( CCT )
+
+            count   = sum( ! is.na(CCT) )
             if( 0 < count  )
                 {
-                printf( "strict=TRUE test failed for %d of %d points too far from the '%s' locus.  delta=%g", 
+                printf( "strict=TRUE test failed for %d of %d points too far from the '%s' locus.  delta=%g",
                                     count, length(CCT), locus, delta )
                 return(FALSE)
-                }    
+                }
             }
-    
+
         }
-        
+
     printf( "testStrictness('%s') passed.", locus )
-               
+
     return(TRUE)
     }
-    
+
+
+
+
 if( ! testRoundtrips.uv('robertson') )  stop( "testRoundtrips.uv('robertson') failed !", call.=FALSE )
-    
+
 if( ! testRoundtrips.uv('precision') )  stop( "testRoundtrips.uv('precision') failed !", call.=FALSE )
-        
+
 if( ! testRoundtrips.xy() )             stop( "testRoundtrips.xy() failed !", call.=FALSE )
-      
-if( ! testStrictness('robertson') )     stop( "testStrictness('robertson') failed !", call.=FALSE )
-    
+
+
 if( ! testStrictness('precision') )     stop( "testStrictness('precision') failed !", call.=FALSE )
-    
+
+if( ! testStrictness('robertson') )     stop( "testStrictness('robertson') failed !", call.=FALSE )    # this one started to fail in Feb 2025, invest later
+
 
 printf(  "\nPassed all CCT tests !" )
-     

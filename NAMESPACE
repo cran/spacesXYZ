@@ -35,7 +35,12 @@ export( LabfromLCHab,
         )
 
 #   color difference functions       
-export( DeltaE )
+export( DeltaE,
+        DeltaE_CAM02
+        )
+
+#   color appearance models
+export( CIECAM02fromXYZ )
 
 #   CCT functions
 export( CCTfromXYZ,

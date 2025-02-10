@@ -25,7 +25,7 @@ usually either xy (1931) or uv (1960).
 Computing uv values (and derivatives) is lengthy because there are 471 wavelengths.
 An approximation to the reference locus is desirable.
 
-The default locus approximation is a spline
+The default locus approximation is a cubic spline
 (using \code{\link[stats:splinefun]{stats::splinefun}()} with \code{method="fmm"})
 through the 31 uv locus points in \cite{Robertson} and \cite{Wyszecki & Stiles}.
 This spline does not appear in \cite{Robertson}, but I think he would approve of it.
@@ -42,14 +42,17 @@ See \link[=RobertsonLocus]{Planckian Loci}.
 The lines that are perpendicular to the locus are called the \emph{native isotherms}.
 
 The second available locus is a quintic spline through 65 points (knots),
-that were computed and saved with full precision.
+that were computed offline and saved with full precision.
 The maximum RMS error in the uv-plane is about \eqn{7.2 \times 10^{-12}}
 over the valid temperature interval [1000,\eqn{\infty}] K.
 For this one the 1st and 2nd derivatives were also computed,
 so the normal vectors at the knots are accurate,
 and the curve is also \eqn{C^2}.
 See \link[=RobertsonLocus]{Planckian Loci}.
-The lines that are perpendicular to the locus are also called the \emph{native isotherms}.
+The lines that are perpendicular to the locus are called the \emph{native isotherms}
+for the locus.
+Since there are 2 available loci, technically there are 2 distinct native isotherms,
+but they are very similar.
 
 Two more families of isotherms are available.
 The \cite{Robertson} isotherms are tabulated just like the points on the locus,
@@ -75,7 +78,7 @@ CCTfromXYZ( XYZ, isotherms='robertson',  locus='robertson', strict=FALSE )
 CCTfromxy( xy, isotherms='robertson',  locus='robertson', strict=FALSE )
 CCTfromuv( uv, isotherms='robertson', locus='robertson', strict=FALSE )
 
-planckLocus( temperature, locus='robertson', param='robertson', delta=0, space=1960 )
+planckLocus( temperature, locus='robertson', param='robertson', Duv=0, space=1960 )
 }
 
 \arguments{
@@ -95,9 +98,8 @@ of the available isotherm families:
 Matching is partial and case-insensitive.
 When more than one family is given, a matrix is returned, see \bold{Value}.
 When \code{isotherms='native'} the isotherms are defined implicitly
-as lines perpendicular to the locus, see \bold{Details}.
-The character \code{NA} (\code{NA_character_}) is taken as
-a synonym for \code{'native'}.
+as lines perpendicular to the locus given by the next argument, see \bold{Details}.
+%The character \code{NA} (\code{NA_character_}) is taken as %a synonym for \code{'native'}.
 }
 
 \item{locus}{
@@ -119,15 +121,14 @@ Planckian locus, either for \code{uv}, \code{u'v'}, or \code{xy}; see \code{spac
 \item{param}{the desired parameterization of the locus.
 It can be either \code{'native'}, or a parameterization induced by the
 \code{'robertson'} or \code{'mccamy'} isotherms.
-The character \code{NA} (\code{NA_character_}) is taken as
-a synonym for \code{'native'}.
+%The character \code{NA} (\code{NA_character_}) is taken as a synonym for \code{'native'}.
 }
 
-\item{delta}{a vector of offset distances in \code{uv} (CIE UCS 1960), 
+\item{Duv}{a vector of offset distances in \code{uv} (CIE UCS 1960), 
 along the corresponding isotherms, from the locus.
-Positive offsets are above the locus, and negative are below.
-\code{delta} can have length M or 1, where M is the length of \code{temperature}.
-If \code{delta} has length 1, that value is replicated to length M.
+Positive offsets are above the locus (greener), and negative offsets are below (purpler).
+\code{Duv} can have length M or 1, where M is the length of \code{temperature}.
+If \code{Duv} has length 1, that value is replicated to length M.
 }
 
 \item{space}{the year of the chromaticity space to return.
@@ -161,13 +162,16 @@ when \code{strict=TRUE}.
 \value{
 \code{CCTfromXYZ()}, \code{CCTfromxy()}, and \code{CCTfromuv()} 
 return a numeric vector of length M, or an MxN matrix.
-It returns a matrix iff \code{length(isotherms) = N} \eqn{\ge} 2,
-and the column names are set to the isotherm family names.
+It returns a matrix iff \code{length(isotherms) = N} \eqn{\ge} 2.
+The column names are set to the isotherm family names.
 The names or rownames are set to the rownames of the input.
 In case of error, the element of the vector or matrix is set to \code{NA_real_}.
 In case there is an error in the arguments, the functions return \code{NULL}.
 In these functions, the locus is not used unless
 \code{isotherms='native'} or \code{strict=TRUE}.
+\cr
+A matrix of \code{Duv} values, with the same dimensions as the returned array of CCT values,
+is attached as attribute \code{"Duv"}.
 
 \code{planckLocus()} returns an Mx2 matrix with chromaticies in the rows.
 The column names are set appropriately for the value of \code{space}.
@@ -219,9 +223,10 @@ the vignette \href{../doc/isotherms.pdf}{\bold{Correlated Color Temperature Isot
 \examples{
 # do a round trip and then compare
 temperature = c(5003,6504)
-uv  = planckLocus( temperature, delta=0.05 )
-CCTfromuv( uv ) - temperature  
-##  2.772227e-05 5.094369e-05 
+uv  = planckLocus( temperature, Duv=0.05 )
+CCTfromuv( uv ) - temperature
+##          5003K         6504K
+##  -5.395038e-05 -1.984926e-04 
 
 # find some points on the daylight locus, and then their CCT
 temperature = seq( 2000, 10000, by=1000 )
@@ -239,7 +244,7 @@ cbind( xy, CCT=CCTfromxy(xy,iso='mccamy') )
 ## D10000 0.2787996 0.2919672 9881.115
 
 # compare all 3 different isotherms
-CCTfromxy( xy, isotherms=c('robertson',NA,'mccamy') )
+CCTfromxy( xy, isotherms=c('robertson','native','mccamy') )
 ##        Robertson   native   McCamy
 ## D2000         NA       NA       NA
 ## D3000         NA       NA       NA
@@ -251,7 +256,7 @@ CCTfromxy( xy, isotherms=c('robertson',NA,'mccamy') )
 ## D9000   8999.301 8993.811 8948.809
 ## D10000  9991.920 9992.672 9881.115
 
-cbind( default=CCTfromxy(xy), prec.native=CCTfromxy(xy,locus='prec',iso=NA) )
+cbind( default=CCTfromxy(xy), prec.native=CCTfromxy(xy,locus='prec',iso='native') )
 ##         default prec.native
 ## 2000K        NA          NA
 ## 3000K        NA          NA
